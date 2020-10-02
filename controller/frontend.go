@@ -9,3 +9,7 @@ import (
 func Index(res http.ResponseWriter, req *http.Request) {
     response.JSON(res, http.StatusOK, response.Body{"message": "it works"})
 }
+
+func NotFound(res http.ResponseWriter, req *http.Request) {
+    response.JSON(res, http.StatusNotFound, response.Body{"message": "resource you are accessing is not available"})
+}
