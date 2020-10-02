@@ -1,10 +1,6 @@
 package model
 
-import (
-    "time"
-
-    "github.com/adhocore/urlsh/common"
-)
+import "time"
 
 type Url struct {
     ID         uint       `json:"-" gorm:"primaryKey"`
@@ -23,5 +19,5 @@ func (urlModel Url) IsActive() bool {
         return false
     }
 
-    return urlModel.ExpiresOn.In(common.UTC).After(time.Now().In(common.UTC))
+    return urlModel.ExpiresOn.In(time.UTC).After(time.Now().In(time.UTC))
 }
