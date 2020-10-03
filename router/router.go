@@ -1,8 +1,9 @@
 package router
 
 import (
-    "github.com/adhocore/urlsh/controller"
     "net/http"
+
+    "github.com/adhocore/urlsh/controller"
 )
 
 type handler func(res http.ResponseWriter, req *http.Request)

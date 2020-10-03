@@ -7,4 +7,3 @@ const (
     // ShortCodeLength is length of short code to be generated (5-12 chars)
     ShortCodeLength = 6
 )
-
