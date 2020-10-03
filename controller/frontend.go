@@ -11,5 +11,5 @@ func Index(res http.ResponseWriter, req *http.Request) {
 }
 
 func NotFound(res http.ResponseWriter, req *http.Request) {
-    response.JSON(res, http.StatusNotFound, response.Body{"message": "resource you are accessing is not available"})
+    response.JSON(res, http.StatusNotFound, response.Body{"message": "requested resource is not available"})
 }
