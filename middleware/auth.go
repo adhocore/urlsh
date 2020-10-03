@@ -16,7 +16,7 @@ func validateAdminToken(req *http.Request) (int, error) {
     adminToken := os.Getenv("APP_ADMIN_TOKEN")
 
     // Require token if only backend is configured and the uri matches admin prefix.
-    if adminToken == "" || strings.Index(req.RequestURI, AdminUriPrefix) != 0 {
+    if adminToken == "" || strings.Index(req.URL.Path, AdminUriPrefix) != 0 {
         return 0, nil
     }
 
