@@ -17,3 +17,12 @@ func ListUrl(res http.ResponseWriter, req *http.Request) {
 
     response.JSON(res, http.StatusOK, response.Body{"urls": urls})
 }
+
+func DeleteShortUrl(res http.ResponseWriter, req *http.Request) {
+    if err := url.DeleteUrlFromRequest(req); err != nil {
+        response.JSON(res, http.StatusNotFound, response.Body{"message": err.Error()})
+        return
+    }
+
+    response.JSON(res, http.StatusOK, response.Body{"deleted": true})
+}
