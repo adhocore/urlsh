@@ -1,10 +1,10 @@
 package router
 
 import (
-    "github.com/adhocore/urlsh/middleware"
     "net/http"
 
     "github.com/adhocore/urlsh/controller"
+    "github.com/adhocore/urlsh/middleware"
 )
 
 var routes = map[string]http.HandlerFunc{
