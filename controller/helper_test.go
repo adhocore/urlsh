@@ -51,6 +51,6 @@ func (body TestBody) assertKeyValue(key string, value interface{}, t *testing.T)
     actual := body.assertContains(key, t)
 
     if actual != value {
-        t.Errorf("response value does not match: wanted %v, got %v", value, actual)
+        t.Errorf("response value does not match:\nwanted: %v\ngot: %v", value, actual)
     }
 }
