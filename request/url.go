@@ -76,10 +76,5 @@ func (input UrlInput) GetExpiresOn() (time.Time, error) {
        return time.Date(9999, 1, 1, 0, 0, 0, 0, time.UTC), nil
    }
 
-   expiresOn, err := time.ParseInLocation(common.DateLayout, input.ExpiresOn, time.UTC)
-   if err != nil {
-       return expiresOn, nil
-   }
-
-   return expiresOn, err
+   return time.ParseInLocation(common.DateLayout, input.ExpiresOn, time.UTC)
 }
