@@ -9,6 +9,7 @@ import (
     "github.com/adhocore/urlsh/request"
 )
 
+// ListUrlsFilteredFromRequest gets list of urls filtered using request query params
 func ListUrlsFilteredFromRequest(req *http.Request) ([]model.Url, error) {
     _ = req.ParseForm()
 
@@ -21,6 +22,7 @@ func ListUrlsFilteredFromRequest(req *http.Request) ([]model.Url, error) {
     return ListUrlsFiltered(filter)
 }
 
+// ListUrlsFiltered gets list of urls filtered
 func ListUrlsFiltered(filter request.UrlFilter) ([]model.Url, error) {
     var urls []model.Url
 
@@ -28,8 +30,6 @@ func ListUrlsFiltered(filter request.UrlFilter) ([]model.Url, error) {
     if filter.ShortCode != "" {
         limit = 1
         conn  = conn.Where("short_code = ?", filter.ShortCode)
-    } else {
-        conn.Offset(filter.GetOffset(limit))
     }
 
     if filter.Keyword != "" {
@@ -39,7 +39,7 @@ func ListUrlsFiltered(filter request.UrlFilter) ([]model.Url, error) {
             Where("keyword = ?", filter.Keyword)
     }
 
-    if conn.Limit(limit).Find(&urls); len(urls) == 0 {
+    if conn.Offset(filter.GetOffset(limit)).Limit(limit).Find(&urls); len(urls) == 0 {
         return urls, common.ErrNoMatchingData
     }
 
