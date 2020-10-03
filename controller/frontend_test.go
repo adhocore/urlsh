@@ -10,3 +10,12 @@ func TestIndex(t *testing.T) {
         resp.assertKeyValue("message", "it works", t)
     })
 }
+
+func TestNotFound(t *testing.T) {
+    t.Run("404 not found", func(t *testing.T) {
+        resp := request("GET", "/not-found", TestBody{}, NotFound)
+
+        resp.assertStatus(404, t)
+        resp.assertKeyValue("message", "requested resource is not available", t)
+    })
+}
