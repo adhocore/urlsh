@@ -45,3 +45,23 @@ func ListUrlsFiltered(filter request.UrlFilter) ([]model.Url, error) {
 
     return urls, nil
 }
+
+func DeleteUrlFromRequest(req *http.Request) error {
+    _ = req.ParseForm()
+
+    shortCode := req.Form.Get("short_code")
+
+    return DeleteUrlByShortCode(shortCode)
+}
+
+func DeleteUrlByShortCode(shortCode string) error {
+    result := orm.Connection().Model(model.Url{}).
+        Where("short_code = ? AND deleted = ?", shortCode, false).
+        Updates(model.Url{Deleted: true})
+
+    if result.RowsAffected == 0 {
+        return common.ErrNoShortCode
+    }
+
+    return nil
+}
