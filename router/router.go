@@ -11,6 +11,7 @@ type handler func(res http.ResponseWriter, req *http.Request)
 var routes = map[string]handler{
     "GET /": controller.Index,
     "POST /api/urls": controller.CreateShortUrl,
+    "GET /api/admin/urls": controller.ListUrl,
 }
 
 func locateHandler(route string) handler {
