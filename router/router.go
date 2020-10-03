@@ -3,6 +3,7 @@ package router
 import (
     "net/http"
 
+    "github.com/adhocore/urlsh/common"
     "github.com/adhocore/urlsh/controller"
     "github.com/adhocore/urlsh/middleware"
 )
@@ -14,21 +15,21 @@ var routes = map[string]http.HandlerFunc{
     "DELETE /api/admin/urls" : controller.DeleteShortUrl,
 }
 
-func locateHandler(route string) http.HandlerFunc {
-    handlerFunc, ok := routes[route]
-
-    if !ok {
-        return controller.NotFound
+func locateHandler(method string, path string) http.HandlerFunc {
+    if handlerFunc, ok := routes[method + " " + path]; ok {
+        return handlerFunc
     }
 
-    return handlerFunc
+    if method == "GET" && common.ShortCodeRegex.MatchString(path[1:]) {
+        return controller.ServeShortUrl
+    }
+
+    return controller.NotFound
 }
 
 func RegisterHandlers() *http.ServeMux {
     handler := http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
-        route := req.Method + " " + req.URL.Path
-
-        locateHandler(route)(res, req)
+        locateHandler(req.Method, req.URL.Path)(res, req)
     })
 
     mux := http.NewServeMux()
