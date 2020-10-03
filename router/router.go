@@ -11,6 +11,7 @@ var routes = map[string]http.HandlerFunc{
     "GET /": controller.Index,
     "POST /api/urls": controller.CreateShortUrl,
     "GET /api/admin/urls": controller.ListUrl,
+    "DELETE /api/admin/urls" : controller.DeleteShortUrl,
 }
 
 func locateHandler(route string) http.HandlerFunc {
