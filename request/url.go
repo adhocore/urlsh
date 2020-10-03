@@ -3,6 +3,7 @@ package request
 import (
     "net/url"
     "regexp"
+    "strconv"
     "time"
 
     "github.com/adhocore/urlsh/common"
@@ -15,6 +16,13 @@ type UrlInput struct {
     Url        string    `json:"url" binding:"required"`
     ExpiresOn  string    `json:"expires_on"`
     Keywords   []string  `json:"keywords"`
+}
+
+// UrlFilter defines structure for short code list and search request
+type UrlFilter struct {
+    ShortCode  string  `json:"short_code"`
+    Keyword    string  `json:"keyword"`
+    Page       string  `json:"page"`
 }
 
 // Validate validates the url input before saving to db
@@ -77,4 +85,18 @@ func (input UrlInput) GetExpiresOn() (time.Time, error) {
    }
 
    return time.ParseInLocation(common.DateLayout, input.ExpiresOn, time.UTC)
+}
+
+// GetOffset gets normalized pagination offset
+func (filter UrlFilter) GetOffset(limit int) int {
+    if filter.Page == "" {
+        return 0
+    }
+
+    page, err := strconv.Atoi(filter.Page)
+    if err != nil || page < 2 {
+        return 0
+    }
+
+    return (page - 1) * limit
 }
