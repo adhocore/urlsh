@@ -10,6 +10,7 @@ import (
     "github.com/adhocore/urlsh/orm"
     "github.com/adhocore/urlsh/request"
     "github.com/adhocore/urlsh/util"
+    "gorm.io/gorm"
 )
 
 func CreateUrlShortCodeFromRequest(req *http.Request) (string, error) {
@@ -38,6 +39,28 @@ func CreateUrlShortCode(input request.UrlInput) (string, error) {
     })
 
     return shortCode, nil
+}
+
+func LookupOriginUrl(shortCode string) (string, int) {
+    var urlModel model.Url
+
+    if status := orm.Connection().Where("short_code = ?", shortCode).First(&urlModel); status.RowsAffected == 0 {
+        return "", http.StatusNotFound
+    }
+
+    if !urlModel.IsActive() {
+        return "", http.StatusGone
+    }
+
+    return urlModel.OriginUrl, http.StatusFound
+}
+
+func IncrementHits(shortCode string) {
+    var urlModel model.Url
+
+    orm.Connection().Model(&urlModel).
+        Where("short_code = ?", shortCode).
+        UpdateColumn("hits", gorm.Expr("hits + ?", 1))
 }
 
 func allowDupeUrl() bool {
