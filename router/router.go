@@ -1,20 +1,19 @@
 package router
 
 import (
+    "github.com/adhocore/urlsh/middleware"
     "net/http"
 
     "github.com/adhocore/urlsh/controller"
 )
 
-type handler func(res http.ResponseWriter, req *http.Request)
-
-var routes = map[string]handler{
+var routes = map[string]http.HandlerFunc{
     "GET /": controller.Index,
     "POST /api/urls": controller.CreateShortUrl,
     "GET /api/admin/urls": controller.ListUrl,
 }
 
-func locateHandler(route string) handler {
+func locateHandler(route string) http.HandlerFunc {
     handlerFunc, ok := routes[route]
 
     if !ok {
@@ -24,10 +23,15 @@ func locateHandler(route string) handler {
     return handlerFunc
 }
 
-func RegisterHandlers() {
-    http.HandleFunc("/", func(res http.ResponseWriter, req *http.Request) {
+func RegisterHandlers() *http.ServeMux {
+    handler := http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
         route := req.Method + " " + req.URL.Path
 
         locateHandler(route)(res, req)
     })
+
+    mux := http.NewServeMux()
+    mux.Handle("/", middleware.AdminAuth(handler))
+
+    return mux
 }
