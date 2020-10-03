@@ -12,4 +12,5 @@ var (
     ErrInvalidDate     = errors.New("expires_on should be in 'yyyy-mm-dd hh:mm:ss' format")
     ErrPastExpiration  = errors.New("expires_on can not be date in past")
     ErrUrlAlreadyShort = errors.New("the url is already shortened")
+    ErrNoMatchingData  = errors.New("no data matching given criteria found")
 )
