@@ -102,7 +102,9 @@ func isExistingShortCode(shortCode string) bool {
 func getShortCodeByOriginUrl(originUrl string) string {
     var urlModel model.Url
 
-    orm.Connection().Select("short_code").Where("origin_url = ?", originUrl).First(&urlModel)
+    orm.Connection().Select("short_code").
+        Where("origin_url = ? AND deleted = ?", originUrl, false).
+        First(&urlModel)
 
     return urlModel.ShortCode
 }
