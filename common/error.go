@@ -15,4 +15,5 @@ var (
     ErrNoMatchingData  = errors.New("no data matching given criteria found")
     ErrTokenRequired   = errors.New("auth token is required")
     ErrTokenInvalid    = errors.New("auth token is invalid")
+    ErrNoShortCode     = errors.New("the given short code is not found")
 )
