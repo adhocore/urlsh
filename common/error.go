@@ -13,4 +13,6 @@ var (
     ErrPastExpiration  = errors.New("expires_on can not be date in past")
     ErrUrlAlreadyShort = errors.New("the url is already shortened")
     ErrNoMatchingData  = errors.New("no data matching given criteria found")
+    ErrTokenRequired   = errors.New("auth token is required")
+    ErrTokenInvalid    = errors.New("auth token is invalid")
 )

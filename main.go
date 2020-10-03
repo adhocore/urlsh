@@ -17,12 +17,11 @@ func main() {
 
     server := &http.Server{
         Addr:         ":" + port,
+        Handler:      router.RegisterHandlers(),
         ReadTimeout:  10 * time.Second,
         WriteTimeout: 10 * time.Second,
     }
 
-    router.RegisterHandlers()
-
-    log.Println("Server running on port " + port)
+    log.Printf("Server running on port %v", port)
     log.Fatal(server.ListenAndServe())
 }
