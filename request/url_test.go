@@ -110,3 +110,27 @@ func TestUrlInput_GetExpiresOn(t *testing.T) {
         }
     })
 }
+
+func TestUrlFilter_GetOffset(t *testing.T) {
+    t.Run("get offset - empty", func(t *testing.T) {
+        if actual := (UrlFilter{Page: ""}).GetOffset(2); actual != 0 {
+            t.Errorf("offset wanted 0, got %v", actual)
+        }
+    })
+
+    t.Run("get offset - less than 2", func(t *testing.T) {
+        if actual := (UrlFilter{Page: "1"}).GetOffset(2); actual != 0 {
+            t.Errorf("offset wanted 0, got %v", actual)
+        }
+    })
+
+    t.Run("get offset", func(t *testing.T) {
+        if actual := (UrlFilter{Page: "2"}).GetOffset(50); actual != 50 {
+            t.Errorf("offset wanted 100, got %v", actual)
+        }
+
+        if actual := (UrlFilter{Page: "3"}).GetOffset(50); actual != 100 {
+            t.Errorf("offset wanted 100, got %v", actual)
+        }
+    })
+}
