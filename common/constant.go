@@ -8,6 +8,9 @@ const (
 
     // ShortCodeLength is length of short code to be generated (5-12 chars)
     ShortCodeLength = 6
+
+    // PopularHits is the number of hits required to mark a short code as popular
+    PopularHits = 5
 )
 
 // ShortCodeRegex is regex to check if a string looks like short code
