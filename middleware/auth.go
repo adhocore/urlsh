@@ -12,6 +12,7 @@ import (
 const AdminUriPrefix = "/api/admin"
 
 // validateAdminToken validates request header token against env token for admin end
+// It returns possible http status code and error if auth token missing/invalid.
 func validateAdminToken(req *http.Request) (int, error) {
     adminToken := os.Getenv("APP_ADMIN_TOKEN")
 

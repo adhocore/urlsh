@@ -7,6 +7,8 @@ import (
 
 type Body map[string]interface{}
 
+// Merge merges another Body with current body
+// It returns the current Body which is result of merge.
 func (body Body) Merge(other Body) Body {
     for key, val := range other {
         body[key] = val
@@ -15,6 +17,8 @@ func (body Body) Merge(other Body) Body {
     return body
 }
 
+// JSON is handy shortcut for serving json response
+// It writes header, status and Body to the given http.ResponseWriter.
 func JSON(res http.ResponseWriter, status int, body Body) {
     body["status"] = status
 

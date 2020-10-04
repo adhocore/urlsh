@@ -11,10 +11,12 @@ import (
 var routes = map[string]http.HandlerFunc{
     "GET /": controller.Index,
     "POST /api/urls": controller.CreateShortUrl,
-    "GET /api/admin/urls": controller.ListUrl,
+    "GET /api/admin/urls": controller.ListUrls,
     "DELETE /api/admin/urls" : controller.DeleteShortUrl,
 }
 
+// locateHandler locates controller for given http request method and path
+// It also handles not found case and short code redirection.
 func locateHandler(method string, path string) http.HandlerFunc {
     if handlerFunc, ok := routes[method + " " + path]; ok {
         return handlerFunc
@@ -27,6 +29,8 @@ func locateHandler(method string, path string) http.HandlerFunc {
     return controller.NotFound
 }
 
+// RegisterHandlers registers middlewares, handlers and route locators
+// It returns server mux which then can be attached to a http server.
 func RegisterHandlers() *http.ServeMux {
     handler := http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
         locateHandler(req.Method, req.URL.Path)(res, req)
