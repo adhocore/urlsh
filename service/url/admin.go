@@ -9,7 +9,8 @@ import (
     "github.com/adhocore/urlsh/request"
 )
 
-// ListUrlsFilteredFromRequest gets list of urls filtered using request query params
+// ListUrlsFilteredFromRequest gets list of urls filtered using http.Request query params
+// It returns list of matching model.Url arrays and error if nothing matched.
 func ListUrlsFilteredFromRequest(req *http.Request) ([]model.Url, error) {
     _ = req.ParseForm()
 
@@ -22,7 +23,8 @@ func ListUrlsFilteredFromRequest(req *http.Request) ([]model.Url, error) {
     return ListUrlsFiltered(filter)
 }
 
-// ListUrlsFiltered gets list of urls filtered
+// ListUrlsFiltered gets list of urls filtered using request.UrlFilter
+// It returns list of matching model.Url arrays and error if nothing matched.
 func ListUrlsFiltered(filter request.UrlFilter) ([]model.Url, error) {
     var urls []model.Url
 

@@ -14,6 +14,8 @@ import (
 
 var conn *gorm.DB
 
+// pgConnect connects to postgres db
+// It returns gorm DB instance.
 func pgConnect() *gorm.DB {
     dsn := os.Getenv("APP_DB_DSN")
     if dsn == "" {
@@ -42,6 +44,8 @@ func pgConnect() *gorm.DB {
 
 var once sync.Once
 
+// Connection gets active db connection ensuring connection is made only once.
+// It returns gorm DB instance.
 func Connection() *gorm.DB {
     once.Do(func() {
         conn = pgConnect()

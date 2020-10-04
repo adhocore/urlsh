@@ -10,7 +10,7 @@ import (
 
 func TestListUrl(t *testing.T) {
     t.Run("list endpoint - not found", func(t *testing.T) {
-        resp := request("GET", "/api/admin/urls?short_code=z", TestBody{}, ListUrl)
+        resp := request("GET", "/api/admin/urls?short_code=z", TestBody{}, ListUrls)
 
         resp.assertStatus(404, t)
     })
@@ -26,12 +26,12 @@ func TestListUrl(t *testing.T) {
         resp.assertStatus(200, t)
 
         t.Run("by page", func(t *testing.T) {
-            resp := request("GET", "/api/admin/urls?page=1", TestBody{}, ListUrl)
+            resp := request("GET", "/api/admin/urls?page=1", TestBody{}, ListUrls)
             resp.assertStatus(200, t)
         })
 
         t.Run("by keyword", func(t *testing.T) {
-            resp := request("GET", "/api/admin/urls?keyword=local", TestBody{}, ListUrl)
+            resp := request("GET", "/api/admin/urls?keyword=local", TestBody{}, ListUrls)
             resp.assertStatus(200, t)
         })
     })

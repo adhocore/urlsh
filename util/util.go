@@ -10,6 +10,8 @@ var (
     poolLength = len(randomPool)
 )
 
+// RandomString generates random string of given length
+// It sets rand see on each call and returns generated string.
 func RandomString(length int) string {
     str := make([]byte, length)
     rand.Seed(time.Now().UTC().UnixNano())
