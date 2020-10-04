@@ -37,7 +37,7 @@ func pgConnect() *gorm.DB {
         log.Fatalf("database error: %v", err)
     }
 
-    _ = db.AutoMigrate(&model.Keyword{}, &model.Url{})
+    _ = db.AutoMigrate(&model.Keyword{}, &model.URL{})
 
     return db
 }
