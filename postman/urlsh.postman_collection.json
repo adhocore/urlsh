@@ -1,0 +1,173 @@
+{
+  "info": {
+    "_postman_id": "bd2d4683-d7ea-4273-9c28-5e34ae0d774c",
+    "name": "urlsh",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "index",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}",
+          "host": [
+            "{{baseUrl}}"
+          ]
+        },
+        "description": "# GET /\n\nIndex route for healtcheck.\n\n## Response payload\n\n```json\n{\n    \"status\": 200,\n    \"message\": \"it works\"\n}\n```\n"
+      },
+      "response": []
+    },
+    {
+      "name": "client.create.urls",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "id": "b6ee25f3-5fc1-4a43-b5a1-560706b4f9fb",
+            "exec": [
+              "pm.environment.set(\"rand\", Math.floor(Math.random() * 1000));"
+            ],
+            "type": "text/javascript"
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "id": "272c1f08-8db6-4551-9bb0-c9a02c0b58a7",
+            "exec": [
+              "pm.environment.set(\"shortCode\", pm.response.json().short_code);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n    \"url\": \"{{baseUrl}}/very/long/url/{{rand}}\",\n    \"keywords\": [\"kw{{rand}}\"]\n}\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/urls",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "urls"
+          ]
+        },
+        "description": "# POST /api/urls\n\nCreates a new short code for given URL.\n\n## Request example\n\n```json\n{\n    \"url\": \"http://somedomain.com/some/very/long/url\",\n    \"expires_on\": \"\",\n    \"keywords\": [\"key\", \"word\"]\n}\n```\n\n## Response example\n\n```json\n{\n    \"status\": 200,\n    \"short_code\": \"qaFxz\",\n    \"short_url\": \"http://localhost:1000/qaFxz\"\n}\n```\n"
+      },
+      "response": []
+    },
+    {
+      "name": "redirect",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/{{shortCode}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "{{shortCode}}"
+          ]
+        },
+        "description": "# GET /{{shortCode}}\n\nRedirects the shortcode to original long URL.\n\n## Response payload\n\nIn case short code exists it responds with 302 redirect.\n\nIf the short code is expired or deleted, it responds like so:\n\n```json\n{\n    \"status\": 410,\n    \"message\": \"requested resource is not available\"\n}\n```\n"
+      },
+      "response": []
+    },
+    {
+      "name": "admin.list.urls",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/urls?page={{page}}&keyword={{keyword}}&short_code={{shortCode}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "urls"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "{{page}}"
+            },
+            {
+              "key": "keyword",
+              "value": "{{keyword}}"
+            },
+            {
+              "key": "short_code",
+              "value": "{{shortCode}}"
+            }
+          ]
+        },
+        "description": "# GET /api/admin/urls\n\n## Authentication\n\nToken required in `Authorization` header like so:\n```ini\nAuthorization: Bearer <token>\n```\n\n## Request query\n\nThe query params are optional.\n\n```ini\npage=<int>\nshort_code=<str> (not short url but code)\nkeyword=<str>\n```\n\n*Examples*\n- `/api/admin/urls?short_code=somecode`\n- `/api/admin/urls?page=1&keyword=something`\n\n## Response example\n\nResponse contains multiple matching url object inside `urls` array.\n\n```json\n{\n    \"status\": 200,\n    \"urls\": [\n        {\n            \"short_code\": \"X5JkFd\",\n            \"origin_url\": \"http://somedomain.com/some/very/long/url\",\n            \"hits\": 1,\n            \"is_deleted\": false,\n            \"expires_on\": \"9999-01-01T00:00:00Z\"\n        }\n    ]\n}\n```\n\n"
+      },
+      "response": []
+    },
+    {
+      "name": "admin.delete.url",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/admin/urls?short_code={{shortCode}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "admin",
+            "urls"
+          ],
+          "query": [
+            {
+              "key": "short_code",
+              "value": "{{shortCode}}"
+            }
+          ]
+        },
+        "description": "# DELETE /api/admin/urls\n\n## Authentication\n\nToken required in `Authorization` header like so:\n```ini\nAuthorization: Bearer <token>\n```\n\n## Request query\n\nQuery param `short_code` is requied.\n\n*Example*: `/api/admin/urls?short_code=somecode`\n\n## Response example\n\nIf delete success:\n\n```json\n{\n    \"status\": 200,\n    \"deleted\": true\n}\n```\n\nIf the code does not exist:\n\n```json\n{\n    \"status\": 404,\n    \"message\": \"the given short code is not found\"\n}\n```\n"
+      },
+      "response": []
+    }
+  ],
+  "protocolProfileBehavior": {}
+}
