@@ -205,3 +205,5 @@ Open the postman app, click `Import`  at top left, select `Folder` and drag/choo
 You may need to adjust the `token` in postman `urlsh` env if you have configured `APP_ADMIN_TOKEN`.
 
 The collection comes with post/pre request hooks for requests so you can just run the endpoints one after another in postman UI.
+
+> For `redirect` request, you have to disable postman follow redirects from `Settings > General > Automatically follow redirects`.
