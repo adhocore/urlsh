@@ -23,13 +23,13 @@ func NotFound(res http.ResponseWriter, _ *http.Request) {
 // It responds to `GET /{shortCode}` and does not require auth token.
 func ServeShortURL(res http.ResponseWriter, req *http.Request) {
     shortCode := req.URL.Path[1:]
-    location, status := url.LookupOriginURL(shortCode)
+    urlModel, status := url.LookupOriginURL(shortCode)
 
     if status != http.StatusFound {
         response.JSON(res, status, response.Body{"message": "requested resource is not available"})
         return
     }
 
-    url.IncrementHits(shortCode)
-    http.Redirect(res, req, location, status)
+    url.IncrementHits(urlModel)
+    http.Redirect(res, req, urlModel.OriginURL, status)
 }

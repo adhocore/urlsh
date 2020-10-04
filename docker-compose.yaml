@@ -16,6 +16,7 @@ services:
       - APP_DB_DSN=host=urlshdb port=5432 user=${POSTGRES_USER:-postgres} password=${POSTGRES_PASSWORD:-postgres} dbname=urlsh sslmode=disable
     depends_on:
       - urlshdb
+      - urlshcache
 
   urlshdb:
     image: postgres:12.4
@@ -29,5 +30,13 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-postgres}
       - POSTGRES_DB=urlsh
 
+  urlshcache:
+    image: redis:alpine
+    ports:
+      - 3000:6379
+    volumes:
+      - cachedata:/data
+
 volumes:
-  dbdata:
+  dbdata: {}
+  cachedata: {}

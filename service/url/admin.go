@@ -3,6 +3,7 @@ package url
 import (
     "net/http"
 
+    "github.com/adhocore/urlsh/cache"
     "github.com/adhocore/urlsh/common"
     "github.com/adhocore/urlsh/model"
     "github.com/adhocore/urlsh/orm"
@@ -65,13 +66,16 @@ func DeleteURLByShortCode(shortCode string) error {
         return common.ErrShortCodeEmpty
     }
 
-    result := orm.Connection().Model(model.URL{}).
+    urlModel := model.URL{ShortCode: shortCode, Deleted: true}
+    result := orm.Connection().Model(urlModel).
         Where("short_code = ? AND deleted = ?", shortCode, false).
-        Updates(model.URL{Deleted: true})
+        Updates(urlModel)
 
     if result.RowsAffected == 0 {
         return common.ErrNoShortCode
     }
+
+    cache.DeactivateURL(urlModel)
 
     return nil
 }
