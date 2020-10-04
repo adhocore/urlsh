@@ -26,7 +26,7 @@ func ListUrlsFilteredFromRequest(req *http.Request) ([]model.Url, error) {
 func ListUrlsFiltered(filter request.UrlFilter) ([]model.Url, error) {
     var urls []model.Url
 
-    limit, conn := 50, orm.Connection().Select("short_code, origin_url, hits, expires_on")
+    limit, conn := 50, orm.Connection().Select("short_code, origin_url, hits, deleted, expires_on")
     if filter.ShortCode != "" {
         limit = 1
         conn  = conn.Where("short_code = ?", filter.ShortCode)
