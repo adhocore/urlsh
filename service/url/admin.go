@@ -57,6 +57,10 @@ func DeleteUrlFromRequest(req *http.Request) error {
 }
 
 func DeleteUrlByShortCode(shortCode string) error {
+    if shortCode == "" {
+        return common.ErrNoShortCode
+    }
+
     result := orm.Connection().Model(model.Url{}).
         Where("short_code = ? AND deleted = ?", shortCode, false).
         Updates(model.Url{Deleted: true})
