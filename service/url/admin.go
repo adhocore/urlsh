@@ -9,24 +9,24 @@ import (
     "github.com/adhocore/urlsh/request"
 )
 
-// ListUrlsFilteredFromRequest gets list of urls filtered using http.Request query params
-// It returns list of matching model.Url arrays and error if nothing matched.
-func ListUrlsFilteredFromRequest(req *http.Request) ([]model.Url, error) {
+// ListURLsFilteredFromRequest gets list of urls filtered using http.Request query params
+// It returns list of matching model.URL arrays and error if nothing matched.
+func ListURLsFilteredFromRequest(req *http.Request) ([]model.URL, error) {
     _ = req.ParseForm()
 
-    filter := request.UrlFilter{
+    filter := request.URLFilter{
         ShortCode: req.Form.Get("short_code"),
         Keyword:   req.Form.Get("keyword"),
         Page:      req.Form.Get("page"),
     }
 
-    return ListUrlsFiltered(filter)
+    return ListURLsFiltered(filter)
 }
 
-// ListUrlsFiltered gets list of urls filtered using request.UrlFilter
-// It returns list of matching model.Url arrays and error if nothing matched.
-func ListUrlsFiltered(filter request.UrlFilter) ([]model.Url, error) {
-    var urls []model.Url
+// ListURLsFiltered gets list of urls filtered using request.URLFilter
+// It returns list of matching model.URL arrays and error if nothing matched.
+func ListURLsFiltered(filter request.URLFilter) ([]model.URL, error) {
+    var urls []model.URL
 
     limit, conn := 50, orm.Connection().Select("short_code, origin_url, hits, deleted, expires_on")
     if filter.ShortCode != "" {
@@ -48,22 +48,26 @@ func ListUrlsFiltered(filter request.UrlFilter) ([]model.Url, error) {
     return urls, nil
 }
 
-func DeleteUrlFromRequest(req *http.Request) error {
+// DeleteURLFromRequest deletes url using short code from request
+// It returns error on failure.
+func DeleteURLFromRequest(req *http.Request) error {
     _ = req.ParseForm()
 
     shortCode := req.Form.Get("short_code")
 
-    return DeleteUrlByShortCode(shortCode)
+    return DeleteURLByShortCode(shortCode)
 }
 
-func DeleteUrlByShortCode(shortCode string) error {
+// DeleteURLByShortCode deletes url using short code
+// It returns error on failure.
+func DeleteURLByShortCode(shortCode string) error {
     if shortCode == "" {
-        return common.ErrNoShortCode
+        return common.ErrShortCodeEmpty
     }
 
-    result := orm.Connection().Model(model.Url{}).
+    result := orm.Connection().Model(model.URL{}).
         Where("short_code = ? AND deleted = ?", shortCode, false).
-        Updates(model.Url{Deleted: true})
+        Updates(model.URL{Deleted: true})
 
     if result.RowsAffected == 0 {
         return common.ErrNoShortCode

@@ -9,39 +9,45 @@ import (
     "github.com/adhocore/urlsh/request"
 )
 
-func prepare() request.UrlFilter {
+func prepare() request.URLFilter {
     rand.Seed(time.Now().UTC().UnixNano())
 
-    longUrl := fmt.Sprintf("http://localhost/some/long/url/%v", rand.Intn(1000000))
-    shortCode, _:= CreateUrlShortCode(request.UrlInput{Url: longUrl, Keywords: []string{"testing"}})
+    longURL := fmt.Sprintf("http://localhost/some/long/url/%v", rand.Intn(1000000))
+    shortCode, _:= CreateURLShortCode(request.URLInput{URL: longURL, Keywords: []string{"testing"}})
 
-    return request.UrlFilter{ShortCode: shortCode, Keyword: "testing"}
+    return request.URLFilter{ShortCode: shortCode, Keyword: "testing"}
 }
 
-func TestListUrlsFiltered(t *testing.T) {
+func TestListURLsFiltered(t *testing.T) {
     t.Run("list urls", func(t *testing.T) {
-        if _, err := ListUrlsFiltered(prepare()); err != nil {
+        if _, err := ListURLsFiltered(prepare()); err != nil {
             t.Errorf("should not return error")
         }
     })
 
     t.Run("list urls", func(t *testing.T) {
-        if _, err := ListUrlsFiltered(request.UrlFilter{ShortCode: "zyx"}); err == nil {
+        if _, err := ListURLsFiltered(request.URLFilter{ShortCode: "zyx"}); err == nil {
             t.Errorf("should return error")
         }
     })
 }
 
-func TestDeleteUrlByShortCode(t *testing.T) {
+func TestDeleteURLByShortCode(t *testing.T) {
     t.Run("delete", func(t *testing.T) {
-        if nil == DeleteUrlByShortCode("xyz") {
+        if nil == DeleteURLByShortCode("") {
+            t.Errorf("should return error")
+        }
+    })
+
+    t.Run("delete", func(t *testing.T) {
+        if nil == DeleteURLByShortCode("xyz") {
             t.Errorf("should return error")
         }
     })
 
     t.Run("delete - ok", func(t *testing.T) {
         shortCode := prepare().ShortCode
-        if nil != DeleteUrlByShortCode(shortCode) {
+        if nil != DeleteURLByShortCode(shortCode) {
             t.Errorf("should not return error for %v", shortCode)
         }
     })

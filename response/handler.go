@@ -5,6 +5,7 @@ import (
     "net/http"
 )
 
+// Body is simple map for response
 type Body map[string]interface{}
 
 // Merge merges another Body with current body

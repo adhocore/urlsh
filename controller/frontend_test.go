@@ -24,27 +24,27 @@ func TestNotFound(t *testing.T) {
     })
 }
 
-func TestServeShortUrl(t *testing.T) {
+func TestServeShortURL(t *testing.T) {
     t.Run("serve short url", func(t *testing.T) {
         url := fmt.Sprintf("http://urlsh.lvh.me/urlsh/lvh/me/%v", rand.Intn(100000))
-        resp := request("POST", "/api/urls", TestBody{"url": url}, CreateShortUrl)
+        resp := request("POST", "/api/urls", TestBody{"url": url}, CreateShortURL)
         shortCode := resp.assertContains("short_code", t).(string)
 
         t.Run("302", func(t *testing.T) {
-            resp := request("GET", "/" + shortCode, TestBody{}, ServeShortUrl)
+            resp := request("GET", "/" + shortCode, TestBody{}, ServeShortURL)
             resp.assertStatus(302, t)
         })
 
         t.Run("404", func(t *testing.T) {
-            resp := request("GET", "/n0cod3", TestBody{}, ServeShortUrl)
+            resp := request("GET", "/n0cod3", TestBody{}, ServeShortURL)
             resp.assertStatus(404, t)
         })
 
         t.Run("delete - 410", func(t *testing.T) {
-            resp := request("DELETE", "/api/admin/urls?short_code=" + shortCode, TestBody{}, DeleteShortUrl)
+            resp := request("DELETE", "/api/admin/urls?short_code=" + shortCode, TestBody{}, DeleteShortURL)
 
             t.Run("410", func(t *testing.T) {
-                resp = request("GET", "/" + shortCode, TestBody{}, ServeShortUrl)
+                resp = request("GET", "/" + shortCode, TestBody{}, ServeShortURL)
                 resp.assertStatus(410, t)
             })
         })

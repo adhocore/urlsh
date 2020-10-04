@@ -7,10 +7,10 @@ import (
     "github.com/adhocore/urlsh/service/url"
 )
 
-// ListUrls is the controller for url listing endpoint using filters from http.Request
+// ListURLs is the controller for url listing endpoint using filters from http.Request
 // It responds to `GET /api/admin/urls` and requires auth token.
-func ListUrls(res http.ResponseWriter, req *http.Request) {
-    urls, err := url.ListUrlsFilteredFromRequest(req)
+func ListURLs(res http.ResponseWriter, req *http.Request) {
+    urls, err := url.ListURLsFilteredFromRequest(req)
 
     if err != nil {
         response.JSON(res, http.StatusNotFound, response.Body{"message": err.Error(), "urls": urls})
@@ -20,10 +20,10 @@ func ListUrls(res http.ResponseWriter, req *http.Request) {
     response.JSON(res, http.StatusOK, response.Body{"urls": urls})
 }
 
-// DeleteShortUrl is the controller for deleting short url
+// DeleteShortURL is the controller for deleting short url
 // It responds to `DELETE /api/admin/urls` and requires auth token.
-func DeleteShortUrl(res http.ResponseWriter, req *http.Request) {
-    if err := url.DeleteUrlFromRequest(req); err != nil {
+func DeleteShortURL(res http.ResponseWriter, req *http.Request) {
+    if err := url.DeleteURLFromRequest(req); err != nil {
         response.JSON(res, http.StatusNotFound, response.Body{"message": err.Error()})
         return
     }

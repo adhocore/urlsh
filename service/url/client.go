@@ -13,32 +13,32 @@ import (
     "gorm.io/gorm"
 )
 
-// CreateUrlShortCodeFromRequest creates a new short code for url given in http.Request
+// CreateURLShortCodeFromRequest creates a new short code for url given in http.Request
 // It uses expires_on date and keywords from http.Request if available.
 // It returns created short code or error if any.
-func CreateUrlShortCodeFromRequest(req *http.Request) (string, error) {
-    var input request.UrlInput
+func CreateURLShortCodeFromRequest(req *http.Request) (string, error) {
+    var input request.URLInput
 
     if err := json.NewDecoder(req.Body).Decode(&input); err != nil {
         return "", err
     }
 
-    return CreateUrlShortCode(input)
+    return CreateURLShortCode(input)
 }
 
-// CreateUrlShortCodeFromRequest creates a new short code using request.UrlInput
+// CreateURLShortCode creates a new short code using request.URLInput
 // It returns created short code or error if any.
-func CreateUrlShortCode(input request.UrlInput) (string, error) {
-    if shortCode, err := validateUrlInput(input, allowDupeUrl()); err != nil {
+func CreateURLShortCode(input request.URLInput) (string, error) {
+    if shortCode, err := validateURLInput(input, allowDupeURL()); err != nil {
         return shortCode, err
     }
 
     shortCode := getUniqueShortCode()
     expiresOn, _ := input.GetExpiresOn()
 
-    orm.Connection().Create(&model.Url{
+    orm.Connection().Create(&model.URL{
         ShortCode: shortCode,
-        OriginUrl: input.Url,
+        OriginURL: input.URL,
         Keywords:  mapKeywords(input.Keywords),
         ExpiresOn: expiresOn,
     })
@@ -46,10 +46,10 @@ func CreateUrlShortCode(input request.UrlInput) (string, error) {
     return shortCode, nil
 }
 
-// LookupOriginUrl looks up origin url from shortCode
+// LookupOriginURL looks up origin url from shortCode
 // It returns origin url if exists and is active, http error code otherwise.
-func LookupOriginUrl(shortCode string) (string, int) {
-    var urlModel model.Url
+func LookupOriginURL(shortCode string) (string, int) {
+    var urlModel model.URL
 
     if status := orm.Connection().Where("short_code = ?", shortCode).First(&urlModel); status.RowsAffected == 0 {
         return "", http.StatusNotFound
@@ -59,32 +59,32 @@ func LookupOriginUrl(shortCode string) (string, int) {
         return "", http.StatusGone
     }
 
-    return urlModel.OriginUrl, http.StatusFound
+    return urlModel.OriginURL, http.StatusFound
 }
 
 // IncrementHits increments hit counter for given shortCode just before serving redirection
 func IncrementHits(shortCode string) {
-    var urlModel model.Url
+    var urlModel model.URL
 
     orm.Connection().Model(&urlModel).
         Where("short_code = ?", shortCode).
         UpdateColumn("hits", gorm.Expr("hits + ?", 1))
 }
 
-// allowDupeUrl checks is app is configured to allow dupe url
-func allowDupeUrl() bool {
+// allowDupeURL checks is app is configured to allow dupe url
+func allowDupeURL() bool {
     return os.Getenv("APP_ALLOW_DUPE_URL") == "1"
 }
 
-// validateUrlInput validates given request.UrlInput
+// validateURLInput validates given request.URLInput
 // It returns existing short code for input url if exists and validation error if any.
-func validateUrlInput(input request.UrlInput, allowDup bool) (string, error) {
+func validateURLInput(input request.URLInput, allowDup bool) (string, error) {
     if err := input.Validate(); err != nil || allowDup {
         return "", err
     }
 
-    if shortCode := getShortCodeByOriginUrl(input.Url); shortCode != "" {
-        return shortCode, common.ErrUrlAlreadyShort
+    if shortCode := getShortCodeByOriginURL(input.URL); shortCode != "" {
+        return shortCode, common.ErrURLAlreadyShort
     }
 
     return "", nil
@@ -107,20 +107,20 @@ func getUniqueShortCode() string {
 // isExistingShortCode checks if given short code exists in db
 // It returns bool.
 func isExistingShortCode(shortCode string) bool {
-    var urlModel model.Url
+    var urlModel model.URL
 
     status := orm.Connection().Select("short_code").Where("short_code = ?", shortCode).First(&urlModel)
 
     return status.RowsAffected > 0
 }
 
-// getShortCodeByOriginUrl gets short code for given origin url
+// getShortCodeByOriginURL gets short code for given origin url
 // It returns short code string.
-func getShortCodeByOriginUrl(originUrl string) string {
-    var urlModel model.Url
+func getShortCodeByOriginURL(originURL string) string {
+    var urlModel model.URL
 
     orm.Connection().Select("short_code").
-        Where("origin_url = ? AND deleted = ?", originUrl, false).
+        Where("origin_url = ? AND deleted = ?", originURL, false).
         First(&urlModel)
 
     return urlModel.ShortCode

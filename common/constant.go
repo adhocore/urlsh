@@ -10,5 +10,5 @@ const (
     ShortCodeLength = 6
 )
 
-// ShortCodePattern is regex to check if a string looks like short code
+// ShortCodeRegex is regex to check if a string looks like short code
 var ShortCodeRegex, _ = regexp.Compile("^[a-zA-Z0-9]{4,12}$")

@@ -2,10 +2,11 @@ package model
 
 import "time"
 
-type Url struct {
+// URL is model for short urls
+type URL struct {
     ID         uint       `json:"-" gorm:"primaryKey"`
     ShortCode  string     `json:"short_code" gorm:"size:12;uniqueIndex;not null"`
-    OriginUrl  string     `json:"origin_url" gorm:"size:2048;index;not null"`
+    OriginURL  string     `json:"origin_url" gorm:"size:2048;index;not null"`
     Hits       uint       `json:"hits" gorm:"default:0;not null"`
     Deleted    bool       `json:"is_deleted" gorm:"default:false;not null"`
     CreatedAt  time.Time  `json:"-" gorm:"not null"`
@@ -16,7 +17,7 @@ type Url struct {
 
 // IsActive checks if the url model is active
 // It returns true if url is not marked deleted or expired, false otherwise.
-func (urlModel Url) IsActive() bool {
+func (urlModel URL) IsActive() bool {
     if urlModel.Deleted {
         return false
     }

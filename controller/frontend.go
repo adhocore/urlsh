@@ -19,11 +19,11 @@ func NotFound(res http.ResponseWriter, _ *http.Request) {
     response.JSON(res, http.StatusNotFound, response.Body{"message": "requested resource is not available"})
 }
 
-// ServeShortUrl is the controller for serving short urls
+// ServeShortURL is the controller for serving short urls
 // It responds to `GET /{shortCode}` and does not require auth token.
-func ServeShortUrl(res http.ResponseWriter, req *http.Request) {
+func ServeShortURL(res http.ResponseWriter, req *http.Request) {
     shortCode := req.URL.Path[1:]
-    location, status := url.LookupOriginUrl(shortCode)
+    location, status := url.LookupOriginURL(shortCode)
 
     if status != http.StatusFound {
         response.JSON(res, status, response.Body{"message": "requested resource is not available"})

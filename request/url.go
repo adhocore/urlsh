@@ -9,17 +9,18 @@ import (
     "github.com/adhocore/urlsh/common"
 )
 
-const UrlBlackListRegex = "(xxx)"
+// URLBlackListRegex is regex to filter unwanted urls
+const URLBlackListRegex = "(xxx)"
 
-// UrlInput defines structure for create short code url request
-type UrlInput struct {
-    Url        string    `json:"url" binding:"required"`
+// URLInput defines structure for create short code url request
+type URLInput struct {
+    URL        string    `json:"url" binding:"required"`
     ExpiresOn  string    `json:"expires_on"`
     Keywords   []string  `json:"keywords"`
 }
 
-// UrlFilter defines structure for short code list and search request
-type UrlFilter struct {
+// URLFilter defines structure for short code list and search request
+type URLFilter struct {
     ShortCode  string  `json:"short_code"`
     Keyword    string  `json:"keyword"`
     Page       string  `json:"page"`
@@ -27,21 +28,21 @@ type UrlFilter struct {
 
 // Validate validates the url input before saving to db
 // It returns error if something is not valid.
-func (input UrlInput) Validate() error {
-    if l := len(input.Url); l < 7 || l > 2048 {
-        return common.ErrInvalidUrlLen
+func (input URLInput) Validate() error {
+    if l := len(input.URL); l < 7 || l > 2048 {
+        return common.ErrInvalidURLLen
     }
 
-    if match, _ := regexp.MatchString("^(f|ht)tps?://+", input.Url); !match {
-        return common.ErrInvalidUrl
+    if match, _ := regexp.MatchString("^(f|ht)tps?://+", input.URL); !match {
+        return common.ErrInvalidURL
     }
 
-    if _, err := url.ParseRequestURI(input.Url); err != nil {
-        return common.ErrInvalidUrl
+    if _, err := url.ParseRequestURI(input.URL); err != nil {
+        return common.ErrInvalidURL
     }
 
-    if match, _ := regexp.MatchString(UrlBlackListRegex, input.Url); match {
-        return common.ErrBlacklistedUrl
+    if match, _ := regexp.MatchString(URLBlackListRegex, input.URL); match {
+        return common.ErrBlacklistedURL
     }
 
     if len(input.Keywords) > 10 {
@@ -59,7 +60,7 @@ func (input UrlInput) Validate() error {
 
 // ValidateExpiry validates expires_on date if not empty
 // It returns error if expiry date is not valid.
-func (input UrlInput) ValidateExpiry() error {
+func (input URLInput) ValidateExpiry() error {
     if input.ExpiresOn == "" {
         return nil
     }
@@ -81,7 +82,7 @@ func (input UrlInput) ValidateExpiry() error {
 }
 
 // GetExpiresOn gets date time instance or error if parse fails
-func (input UrlInput) GetExpiresOn() (time.Time, error) {
+func (input URLInput) GetExpiresOn() (time.Time, error) {
    if input.ExpiresOn == "" {
        return time.Date(9999, 1, 1, 0, 0, 0, 0, time.UTC), nil
    }
@@ -90,7 +91,7 @@ func (input UrlInput) GetExpiresOn() (time.Time, error) {
 }
 
 // GetOffset gets normalized pagination offset
-func (filter UrlFilter) GetOffset(limit int) int {
+func (filter URLFilter) GetOffset(limit int) int {
     if filter.Page == "" {
         return 0
     }
