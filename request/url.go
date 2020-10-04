@@ -26,6 +26,7 @@ type UrlFilter struct {
 }
 
 // Validate validates the url input before saving to db
+// It returns error if something is not valid.
 func (input UrlInput) Validate() error {
     if l := len(input.Url); l < 7 || l > 2048 {
         return common.ErrInvalidUrlLen
@@ -57,6 +58,7 @@ func (input UrlInput) Validate() error {
 }
 
 // ValidateExpiry validates expires_on date if not empty
+// It returns error if expiry date is not valid.
 func (input UrlInput) ValidateExpiry() error {
     if input.ExpiresOn == "" {
         return nil
