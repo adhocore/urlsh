@@ -23,7 +23,7 @@ func tester(token string, expectStatus int, t *testing.T) *httptest.ResponseReco
 
     res := httptest.NewRecorder()
     mux := http.NewServeMux()
-    mux.Handle("/", AdminAuth(http.HandlerFunc(controller.ListUrls)))
+    mux.Handle("/", AdminAuth(http.HandlerFunc(controller.ListURLs)))
     mux.ServeHTTP(res, req)
 
     if res.Result().StatusCode != expectStatus {

@@ -10,9 +10,9 @@ import (
 
 var routes = map[string]http.HandlerFunc{
     "GET /": controller.Index,
-    "POST /api/urls": controller.CreateShortUrl,
-    "GET /api/admin/urls": controller.ListUrls,
-    "DELETE /api/admin/urls" : controller.DeleteShortUrl,
+    "POST /api/urls": controller.CreateShortURL,
+    "GET /api/admin/urls": controller.ListURLs,
+    "DELETE /api/admin/urls" : controller.DeleteShortURL,
 }
 
 // locateHandler locates controller for given http request method and path
@@ -23,7 +23,7 @@ func locateHandler(method string, path string) http.HandlerFunc {
     }
 
     if method == "GET" && common.ShortCodeRegex.MatchString(path[1:]) {
-        return controller.ServeShortUrl
+        return controller.ServeShortURL
     }
 
     return controller.NotFound
