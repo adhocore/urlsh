@@ -14,6 +14,8 @@ type Url struct {
     Keywords   []Keyword  `json:"-" gorm:"many2many:url_keywords"`
 }
 
+// IsActive checks if the url model is active
+// It returns true if url is not marked deleted or expired, false otherwise.
 func (urlModel Url) IsActive() bool {
     if urlModel.Deleted {
         return false
