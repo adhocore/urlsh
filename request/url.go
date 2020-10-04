@@ -1,0 +1,104 @@
+package request
+
+import (
+    "net/url"
+    "regexp"
+    "strconv"
+    "time"
+
+    "github.com/adhocore/urlsh/common"
+)
+
+const UrlBlackListRegex = "(xxx)"
+
+// UrlInput defines structure for create short code url request
+type UrlInput struct {
+    Url        string    `json:"url" binding:"required"`
+    ExpiresOn  string    `json:"expires_on"`
+    Keywords   []string  `json:"keywords"`
+}
+
+// UrlFilter defines structure for short code list and search request
+type UrlFilter struct {
+    ShortCode  string  `json:"short_code"`
+    Keyword    string  `json:"keyword"`
+    Page       string  `json:"page"`
+}
+
+// Validate validates the url input before saving to db
+// It returns error if something is not valid.
+func (input UrlInput) Validate() error {
+    if l := len(input.Url); l < 7 || l > 2048 {
+        return common.ErrInvalidUrlLen
+    }
+
+    if match, _ := regexp.MatchString("^(f|ht)tps?://+", input.Url); !match {
+        return common.ErrInvalidUrl
+    }
+
+    if _, err := url.ParseRequestURI(input.Url); err != nil {
+        return common.ErrInvalidUrl
+    }
+
+    if match, _ := regexp.MatchString(UrlBlackListRegex, input.Url); match {
+        return common.ErrBlacklistedUrl
+    }
+
+    if len(input.Keywords) > 10 {
+        return common.ErrKeywordsCount
+    }
+
+    for _, word := range input.Keywords {
+        if l := len(word); l < 2 || l > 25 {
+            return common.ErrKeywordLength
+        }
+    }
+
+    return input.ValidateExpiry()
+}
+
+// ValidateExpiry validates expires_on date if not empty
+// It returns error if expiry date is not valid.
+func (input UrlInput) ValidateExpiry() error {
+    if input.ExpiresOn == "" {
+        return nil
+    }
+
+    if len(input.ExpiresOn) != len(common.DateLayout) {
+        return common.ErrInvalidDate
+    }
+
+    expiresOn, err := input.GetExpiresOn()
+    if err != nil {
+        return common.ErrInvalidDate
+    }
+
+    if expiresOn.In(time.UTC).Before(time.Now().In(time.UTC)) {
+        return common.ErrPastExpiration
+    }
+
+    return nil
+}
+
+// GetExpiresOn gets date time instance or error if parse fails
+func (input UrlInput) GetExpiresOn() (time.Time, error) {
+   if input.ExpiresOn == "" {
+       return time.Date(9999, 1, 1, 0, 0, 0, 0, time.UTC), nil
+   }
+
+   return time.ParseInLocation(common.DateLayout, input.ExpiresOn, time.UTC)
+}
+
+// GetOffset gets normalized pagination offset
+func (filter UrlFilter) GetOffset(limit int) int {
+    if filter.Page == "" {
+        return 0
+    }
+
+    page, err := strconv.Atoi(filter.Page)
+    if err != nil || page < 2 {
+        return 0
+    }
+
+    return (page - 1) * limit
+}

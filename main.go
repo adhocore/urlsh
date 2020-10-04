@@ -6,7 +6,7 @@ import (
     "os"
     "time"
 
-    "github.com/adhocore/urlsh/controller"
+    "github.com/adhocore/urlsh/router"
 )
 
 func main() {
@@ -17,11 +17,11 @@ func main() {
 
     server := &http.Server{
         Addr:         ":" + port,
+        Handler:      router.RegisterHandlers(),
         ReadTimeout:  10 * time.Second,
         WriteTimeout: 10 * time.Second,
     }
 
-    http.HandleFunc("/", controller.Index)
-
+    log.Printf("Server running on port %v", port)
     log.Fatal(server.ListenAndServe())
 }
