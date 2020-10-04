@@ -25,7 +25,11 @@ func request(method string, uri string, data TestBody, handler http.HandlerFunc)
     handler(res, req)
 
     var actual TestBody
-    _ = json.Unmarshal(res.Body.Bytes(), &actual)
+    if err := json.Unmarshal(res.Body.Bytes(), &actual); err != nil {
+        actual = TestBody{}
+    }
+
+    actual["status"] = res.Result().StatusCode
 
     return actual
 }
@@ -42,7 +46,7 @@ func (body TestBody) assertContains(key string, t *testing.T) interface{} {
 func (body TestBody) assertStatus(status int, t *testing.T)  {
     actual := body.assertContains("status", t)
 
-    if status != int(actual.(float64)) {
+    if status != actual.(int) {
         t.Errorf("response status does not match: wanted %v, got %v", status, actual)
     }
 }
@@ -51,6 +55,6 @@ func (body TestBody) assertKeyValue(key string, value interface{}, t *testing.T)
     actual := body.assertContains(key, t)
 
     if actual != value {
-        t.Errorf("response value does not match: wanted %v, got %v", value, actual)
+        t.Errorf("response value does not match:\nwanted: %v\ngot: %v", value, actual)
     }
 }
