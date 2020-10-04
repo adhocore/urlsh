@@ -29,6 +29,7 @@ func connect() redis.Conn {
     return c
 }
 
+// Connection connects to redis once and returns the connection
 func Connection() redis.Conn {
     once.Do(func() {
         conn = connect()
@@ -37,6 +38,8 @@ func Connection() redis.Conn {
     return conn
 }
 
+// LookupURL looks up if certain short code is popular enough to be in cache
+// It returns model.URL so the request can be served right way without db hit.
 func LookupURL(shortCode string) (model.URL, int) {
     var urlModel model.URL
     if nil == Connection() {
@@ -61,16 +64,17 @@ func LookupURL(shortCode string) (model.URL, int) {
     return urlModel, http.StatusFound
 }
 
+// DeactivateUrl deactivates cache of an expired/deleted model.URL
+// PS, this operation is always cached so Gone (410) can be served without db hit.
 func DeactivateUrl(urlModel model.URL) {
     cacheModel, status := LookupURL(urlModel.ShortCode)
-    if status == 0 {
-        return
-    }
 
     urlModel.OriginURL = cacheModel.OriginURL
     SavePopularUrl(urlModel, true)
 }
 
+// SavePopularUrl saves an urlmodel to cache
+// If force is passed, it saves even if already exists
 func SavePopularUrl(urlModel model.URL, force bool) {
     if nil == Connection() || (!force && hasUrl(urlModel)) {
         return
