@@ -227,3 +227,7 @@ You may need to adjust the `token` in postman `urlsh` env if you have configured
 The collection comes with post/pre request hooks for requests so you can just run the endpoints one after another in postman UI.
 
 > For `redirect` request, you have to disable postman follow redirects from `Settings > General > Automatically follow redirects`.
+
+### License
+
+Please check [license](./LICENSE) file.
