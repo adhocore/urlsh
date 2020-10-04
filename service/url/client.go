@@ -5,6 +5,7 @@ import (
     "net/http"
     "os"
 
+    "github.com/adhocore/urlsh/cache"
     "github.com/adhocore/urlsh/common"
     "github.com/adhocore/urlsh/model"
     "github.com/adhocore/urlsh/orm"
@@ -48,27 +49,37 @@ func CreateURLShortCode(input request.URLInput) (string, error) {
 
 // LookupOriginURL looks up origin url from shortCode
 // It returns origin url if exists and is active, http error code otherwise.
-func LookupOriginURL(shortCode string) (string, int) {
+func LookupOriginURL(shortCode string) (model.URL, int) {
     var urlModel model.URL
 
+    if cacheModel, status := cache.LookupURL(shortCode); status != 0 {
+        return cacheModel, status
+    }
+
     if status := orm.Connection().Where("short_code = ?", shortCode).First(&urlModel); status.RowsAffected == 0 {
-        return "", http.StatusNotFound
+        return urlModel, http.StatusNotFound
     }
 
     if !urlModel.IsActive() {
-        return "", http.StatusGone
+        if !urlModel.Deleted {
+            cache.DeactivateUrl(urlModel)
+        }
+
+        return urlModel, http.StatusGone
     }
 
-    return urlModel.OriginURL, http.StatusFound
+    return urlModel, http.StatusFound
 }
 
 // IncrementHits increments hit counter for given shortCode just before serving redirection
-func IncrementHits(shortCode string) {
-    var urlModel model.URL
-
+func IncrementHits(urlModel model.URL) {
     orm.Connection().Model(&urlModel).
-        Where("short_code = ?", shortCode).
+        Where("short_code = ?", urlModel.ShortCode).
         UpdateColumn("hits", gorm.Expr("hits + ?", 1))
+
+    if urlModel.Hits >= common.PopularHits {
+        cache.SavePopularUrl(urlModel, false)
+    }
 }
 
 // allowDupeURL checks is app is configured to allow dupe url
