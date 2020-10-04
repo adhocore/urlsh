@@ -9,7 +9,8 @@ import (
     "github.com/adhocore/urlsh/response"
 )
 
-const AdminUriPrefix = "/api/admin"
+// AdminURIPrefix is the uri to intercept by auth middleware
+const AdminURIPrefix = "/api/admin"
 
 // validateAdminToken validates request header token against env token for admin end
 // It returns possible http status code and error if auth token missing/invalid.
@@ -17,7 +18,7 @@ func validateAdminToken(req *http.Request) (int, error) {
     adminToken := os.Getenv("APP_ADMIN_TOKEN")
 
     // Require token if only backend is configured and the uri matches admin prefix.
-    if adminToken == "" || strings.Index(req.URL.Path, AdminUriPrefix) != 0 {
+    if adminToken == "" || strings.Index(req.URL.Path, AdminURIPrefix) != 0 {
         return 0, nil
     }
 
