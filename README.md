@@ -3,7 +3,8 @@
 **urlsh** is URL shortener application built on [Go](https://golang.org) language.
 
 It does not use external libraries except the [`gorm`](http://gorm.io) for
-[`postgres`](https://github.com/go-gorm/postgres) database.
+[`postgres`](https://github.com/go-gorm/postgres) database and minimal redis
+module [redigo](https://github.com/gomodule/redigo).
 
 It registers itself as Go module `github.com/adhocore/urlsh`
 (however it has not been submitted to Go package registry for public usage).
@@ -32,6 +33,11 @@ automatically set from [`POSTGRES_*`](https://hub.docker.com/_/postgres) variabl
 
 > Please note that `urlsh` does not ship with `.env` loader so to run it in bare metal,
 one needs to use `export KEY=VALUE` or `source .env` manually.
+
+If `APP_CACHE_HOST` is provided with redis host:port, then it will cache popular urls,
+the popularity threshold is hard coded to minimal value in `common.constant`.
+The cache will sync when short url is deleted and sometimes when expired.
+The hit counters will however sync in realtime.
 
 ## Setting up docker
 
