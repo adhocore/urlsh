@@ -55,7 +55,13 @@ For running tests,
 
 ```sh
 docker-compose exec urlsh sh -c "APP_ENV=test go test ./..."
+
+# for coverage
+docker-compose exec urlsh sh -c "APP_ENV=test go test -cover ./..."
 ```
+
+`APP_ENV=test` is not required but ensures that tests are run against clone database with name prefixed by `test_`.
+Normally test db is already prepared if you use `docker-compose`.
 
 ---
 ## API Endpoints
