@@ -64,26 +64,26 @@ func LookupURL(shortCode string) (model.URL, int) {
     return urlModel, http.StatusFound
 }
 
-// DeactivateUrl deactivates cache of an expired/deleted model.URL
+// DeactivateURL deactivates cache of an expired/deleted model.URL
 // PS, this operation is always cached so Gone (410) can be served without db hit.
-func DeactivateUrl(urlModel model.URL) {
-    cacheModel, status := LookupURL(urlModel.ShortCode)
+func DeactivateURL(urlModel model.URL) {
+    cacheModel, _ := LookupURL(urlModel.ShortCode)
 
     urlModel.OriginURL = cacheModel.OriginURL
-    SavePopularUrl(urlModel, true)
+    SavePopularURL(urlModel, true)
 }
 
-// SavePopularUrl saves an urlmodel to cache
+// SavePopularURL saves a model.URL to cache
 // If force is passed, it saves even if already exists
-func SavePopularUrl(urlModel model.URL, force bool) {
-    if nil == Connection() || (!force && hasUrl(urlModel)) {
+func SavePopularURL(urlModel model.URL, force bool) {
+    if nil == Connection() || (!force && hasURL(urlModel)) {
         return
     }
 
     _, _ = conn.Do("SET", urlKey(urlModel), urlValue(urlModel))
 }
 
-func hasUrl(urlModel model.URL) bool {
+func hasURL(urlModel model.URL) bool {
     exist, err := conn.Do("EXISTS", urlKey(urlModel))
 
     return err == nil && exist.(int64) > 0
