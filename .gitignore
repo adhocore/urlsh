@@ -4,3 +4,4 @@
 *.out
 vendor/
 dist/
+.env

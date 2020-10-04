@@ -3,6 +3,7 @@ package orm
 import (
     "log"
     "os"
+    "strings"
     "sync"
 
     "github.com/adhocore/urlsh/model"
@@ -19,9 +20,11 @@ func pgConnect() *gorm.DB {
         log.Fatal("Database configuration DSN missing, Pass in APP_DB_DSN env")
     }
 
-    logLevel := logger.Warn
-    if os.Getenv("APP_ENV") == "prod" {
+    logLevel, env := logger.Warn, os.Getenv("APP_ENV")
+    if env == "prod" {
         logLevel = logger.Silent
+    } else if env == "test" {
+        dsn = strings.Replace(dsn, "dbname=", "dbname=test_", 1)
     }
 
     db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
@@ -29,7 +32,7 @@ func pgConnect() *gorm.DB {
     })
 
     if err != nil {
-        log.Fatal("Cannot connect to database with given DSN")
+        log.Fatalf("database error: %v", err)
     }
 
     _ = db.AutoMigrate(&model.Keyword{}, &model.Url{})
