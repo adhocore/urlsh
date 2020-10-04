@@ -80,6 +80,10 @@ Creates a new short code for given URL.
 
 #### Request example
 
+- url: string, required, http/https/ftp only
+- expires_on: string, optional, utc date `yyyy-mm-dd hh:mm:ss`, default=`9999-01-01`
+- keywords: array of strings, 2-25 chars each, max 10 keywords
+
 ```json
 {
     "url": "http://somedomain.com/some/very/long/url",
@@ -97,6 +101,10 @@ Creates a new short code for given URL.
     "short_url": "http://localhost:1000/qaFxz"
 }
 ```
+
+> If env var `APP_ALLOW_DUPE_URL` is set to 0 or empty, then trying to shorten same URL again
+will return status 409 and payload will contain existing `short_code`.
+> However if existing `short_code` is deleted, it will be shortened as usual.
 
 ---
 ### GET /{{shortCode}}
