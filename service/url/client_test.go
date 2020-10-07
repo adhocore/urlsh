@@ -10,7 +10,7 @@ func TestLookupOriginURL(t *testing.T) {
         shortCode := prepare().ShortCode
 
         t.Run("lookup - 302", func(t *testing.T) {
-            urlModel, status := LookupOriginURL(shortCode)
+            urlModel, status, _ := LookupOriginURL(shortCode)
             if status != 302 {
                 t.Errorf("unexpected status: wanted 302, go %v", status)
             }
@@ -24,13 +24,13 @@ func TestLookupOriginURL(t *testing.T) {
                 t.Errorf("should not return error")
             }
 
-            if _, status := LookupOriginURL(shortCode); status != 410 {
+            if _, status, _ := LookupOriginURL(shortCode); status != 410 {
                 t.Errorf("unexpected status: wanted 410, go %v", status)
             }
         })
 
         t.Run("lookup - 410", func(t *testing.T) {
-            if _, status := LookupOriginURL("n0cod3"); status != 404 {
+            if _, status, _ := LookupOriginURL("n0cod3"); status != 404 {
                 t.Errorf("unexpected status: wanted 404, go %v", status)
             }
         })

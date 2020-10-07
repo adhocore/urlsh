@@ -49,15 +49,15 @@ func CreateURLShortCode(input request.URLInput) (string, error) {
 
 // LookupOriginURL looks up origin url from shortCode
 // It returns origin url if exists and is active, http error code otherwise.
-func LookupOriginURL(shortCode string) (model.URL, int) {
+func LookupOriginURL(shortCode string) (model.URL, int, bool) {
     var urlModel model.URL
 
     if cacheModel, status := cache.LookupURL(shortCode); status != 0 {
-        return cacheModel, status
+        return cacheModel, status, true
     }
 
     if status := orm.Connection().Where("short_code = ?", shortCode).First(&urlModel); status.RowsAffected == 0 {
-        return urlModel, http.StatusNotFound
+        return urlModel, http.StatusNotFound, false
     }
 
     if !urlModel.IsActive() {
@@ -65,10 +65,10 @@ func LookupOriginURL(shortCode string) (model.URL, int) {
             cache.DeactivateURL(urlModel)
         }
 
-        return urlModel, http.StatusGone
+        return urlModel, http.StatusGone, false
     }
 
-    return urlModel, http.StatusFound
+    return urlModel, http.StatusFound, false
 }
 
 // IncrementHits increments hit counter for given shortCode just before serving redirection
