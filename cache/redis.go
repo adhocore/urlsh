@@ -53,13 +53,13 @@ func LookupURL(shortCode string) (model.URL, int) {
 
     data := string(line.([]uint8))
 
+    urlModel.OriginURL = data[1:]
+    urlModel.ShortCode = shortCode
+
     // 0 = Inactive, 1 = Active
     if data[0:1] == "0" {
         return urlModel, http.StatusGone
     }
-
-    urlModel.OriginURL = data[1:]
-    urlModel.ShortCode = shortCode
 
     return urlModel, http.StatusFound
 }
@@ -69,7 +69,10 @@ func LookupURL(shortCode string) (model.URL, int) {
 func DeactivateURL(urlModel model.URL) {
     cacheModel, _ := LookupURL(urlModel.ShortCode)
 
-    urlModel.OriginURL = cacheModel.OriginURL
+    if urlModel.OriginURL == "" {
+        urlModel.OriginURL = cacheModel.OriginURL
+    }
+
     SavePopularURL(urlModel, true)
 }
 
