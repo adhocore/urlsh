@@ -2,8 +2,10 @@ package request
 
 import (
     "errors"
-    "github.com/adhocore/urlsh/common"
     "testing"
+
+    "github.com/adhocore/urlsh/common"
+
 )
 
 func tester(input URLInput, expect error, t *testing.T) {
