@@ -62,7 +62,7 @@ func LookupOriginURL(shortCode string) (model.URL, int, bool) {
 
     if !urlModel.IsActive() {
         if !urlModel.Deleted {
-            cache.DeactivateURL(urlModel)
+            go cache.DeactivateURL(urlModel)
         }
 
         return urlModel, http.StatusGone, false
@@ -77,7 +77,7 @@ func IncrementHits(urlModel model.URL) {
         Where("short_code = ?", urlModel.ShortCode).
         UpdateColumn("hits", gorm.Expr("hits + ?", 1))
 
-    if urlModel.Hits >= common.PopularHits {
+    if urlModel.Hits + 1 >= common.PopularHits {
         cache.SavePopularURL(urlModel, false)
     }
 }
