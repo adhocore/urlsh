@@ -9,11 +9,19 @@ import (
     "github.com/adhocore/urlsh/router"
 )
 
-func main() {
-    port := os.Getenv("APP_PORT")
-    if port == "" {
-        port = "1000"
+func getPort() string {
+    if port := os.Getenv("PORT"); port != "" {
+        return port
     }
+    if port := os.Getenv("APP_PORT"); port != "" {
+        return port
+    }
+
+    return "1000"
+}
+
+func main() {
+    port := getPort()
 
     server := &http.Server{
         Addr:         ":" + port,
