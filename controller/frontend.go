@@ -34,6 +34,6 @@ func ServeShortURL(res http.ResponseWriter, req *http.Request) {
         return
     }
 
-    url.IncrementHits(urlModel)
+    go url.IncrementHits(urlModel)
     http.Redirect(res, req, urlModel.OriginURL, status)
 }
