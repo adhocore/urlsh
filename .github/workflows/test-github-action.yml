@@ -9,4 +9,4 @@ jobs:
       - name: docker-up
         run: 'cp .env.example .env && docker-compose up -d'
       - name: test
-        run: 'sleep 5 && docker-compose exec -T urlsh sh -c "APP_ENV=test go test -cover ./..."'
+        run: 'sleep 5 && docker-compose exec -T urlshcache redis-cli flushdb && docker-compose exec -T urlsh sh -c "APP_ENV=test go test -cover ./..."'
