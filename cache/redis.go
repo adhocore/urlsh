@@ -20,7 +20,8 @@ func connect() redis.Conn {
         return  nil
     }
 
-    c, err := redis.Dial("tcp", cacheHost)
+    user, pass := os.Getenv("APP_CACHE_USER"), os.Getenv("APP_CACHE_PASS")
+    c, err := redis.Dial("tcp", cacheHost, redis.DialUsername(user), redis.DialPassword(pass))
     if err != nil {
         log.Printf("%v", err)
         return nil
