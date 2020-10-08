@@ -75,7 +75,7 @@ func DeleteURLByShortCode(shortCode string) error {
         return common.ErrNoShortCode
     }
 
-    cache.DeactivateURL(urlModel)
+    go cache.DeactivateURL(urlModel)
 
     return nil
 }
