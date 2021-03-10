@@ -5,7 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     name: test
     steps:
-      - uses: actions/checkout@v2
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: docker-cache
+        uses: satackey/action-docker-layer-caching@v0.0.11
+        continue-on-error: true
+        with:
+          key: ${{ runner.os }}-urls-docker-{hash}
+          restore-keys: ${{ runner.os }}-urlsh-docker-
       - name: docker-up
         run: 'cp .env.example .env && docker-compose up -d'
       - name: test
