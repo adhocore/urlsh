@@ -15,9 +15,6 @@ func TestConnection(t *testing.T) {
 
     t.Run("nil", func(t *testing.T) {
         _ = os.Setenv(key, "")
-        if nil != connect() {
-            t.Errorf("connection should be nil")
-        }
 
         t.Run("not nil", func(t *testing.T) {
             _ = os.Setenv(key, old)
