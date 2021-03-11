@@ -119,7 +119,7 @@ will return status 409 and payload will contain existing `short_code`.
 > However if existing `short_code` is deleted, it will be shortened as usual.
 
 ---
-### GET /{{shortCode}}
+### GET /{shortCode}
 
 Redirects the shortcode to original long URL.
 
