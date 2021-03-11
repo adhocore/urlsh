@@ -1,40 +1,45 @@
 package cache
 
 import (
-    "log"
     "net/http"
     "os"
     "sync"
+    "time"
 
     "github.com/adhocore/urlsh/model"
     "github.com/gomodule/redigo/redis"
 )
 
 var once sync.Once
-var conn redis.Conn
+var pool *redis.Pool
 var prefix = "url:"
 
-func connect() redis.Conn {
+func connect() {
     cacheHost := os.Getenv("APP_CACHE_HOST")
     if cacheHost == "" {
-        return  nil
+        return
     }
 
-    user, pass := os.Getenv("APP_CACHE_USER"), os.Getenv("APP_CACHE_PASS")
-    c, err := redis.Dial("tcp", cacheHost, redis.DialUsername(user), redis.DialPassword(pass))
-    if err != nil {
-        log.Printf("%v", err)
-        return nil
-    }
+    pool = &redis.Pool{
+        MaxIdle: 12,
+        IdleTimeout: 300 * time.Second,
+        Dial: func() (redis.Conn, error) {
+            user, pass := os.Getenv("APP_CACHE_USER"), os.Getenv("APP_CACHE_PASS")
 
-    return c
+            return redis.Dial("tcp", cacheHost, redis.DialUsername(user), redis.DialPassword(pass))
+        },
+    }
 }
 
 // Connection connects to redis once and returns the connection
 func Connection() redis.Conn {
-    once.Do(func() {
-        conn = connect()
-    })
+    once.Do(connect)
+
+    if nil == pool {
+        return nil
+    }
+
+    conn := pool.Get()
 
     return conn
 }
@@ -43,10 +48,13 @@ func Connection() redis.Conn {
 // It returns model.URL so the request can be served right way without db hit.
 func LookupURL(shortCode string) (model.URL, int) {
     var urlModel model.URL
-    if nil == Connection() {
+
+    conn := Connection()
+    if nil == conn {
         return urlModel, 0
     }
 
+    defer conn.Close()
     line, err := conn.Do("GET", urlKey(model.URL{ShortCode: shortCode}))
     if err != nil || line == nil {
         return urlModel, 0
@@ -80,14 +88,22 @@ func DeactivateURL(urlModel model.URL) {
 // SavePopularURL saves a model.URL to cache
 // If force is passed, it saves even if already exists
 func SavePopularURL(urlModel model.URL, force bool) {
-    if nil == Connection() || (!force && hasURL(urlModel)) {
+    conn := Connection()
+    if nil == conn || (!force && hasURL(urlModel)) {
         return
     }
 
+    defer conn.Close()
     _, _ = conn.Do("SET", urlKey(urlModel), urlValue(urlModel))
 }
 
 func hasURL(urlModel model.URL) bool {
+    conn := Connection()
+    if nil == conn {
+        return false
+    }
+
+    defer conn.Close()
     exist, err := conn.Do("EXISTS", urlKey(urlModel))
 
     return err == nil && exist.(int64) > 0
