@@ -9,7 +9,13 @@ import (
 
 // Index is the controller for root aka index page
 // It responds to `GET /` and does not require auth token.
-func Index(res http.ResponseWriter, _ *http.Request) {
+func Index(res http.ResponseWriter, req *http.Request) {
+    http.ServeFile(res, req, "tmpl/home.html")
+}
+
+// Status is the controller for health/status check
+// It responds to `GET /status` and does not require auth token.
+func Status(res http.ResponseWriter, _ *http.Request) {
     response.JSON(res, http.StatusOK, response.Body{"message": "it works"})
 }
 
