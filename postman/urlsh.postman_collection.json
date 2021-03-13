@@ -6,17 +6,17 @@
   },
   "item": [
     {
-      "name": "index",
+      "name": "status",
       "request": {
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "{{baseUrl}}",
+          "raw": "{{baseUrl}}/status",
           "host": [
             "{{baseUrl}}"
           ]
         },
-        "description": "# GET /\n\nIndex route for healtcheck.\n\n## Response payload\n\n```json\n{\n    \"status\": 200,\n    \"message\": \"it works\"\n}\n```\n"
+        "description": "# GET /status\n\nStatus route for healtcheck.\n\n## Response payload\n\n```json\n{\n    \"status\": 200,\n    \"message\": \"it works\"\n}\n```\n"
       },
       "response": []
     },
