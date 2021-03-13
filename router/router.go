@@ -10,6 +10,7 @@ import (
 
 var routes = map[string]http.HandlerFunc{
     "GET /": controller.Index,
+    "GET /status": controller.Status,
     "POST /api/urls": controller.CreateShortURL,
     "GET /api/admin/urls": controller.ListURLs,
     "DELETE /api/admin/urls" : controller.DeleteShortURL,
