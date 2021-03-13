@@ -60,6 +60,6 @@ func TestCreateShortURL(t *testing.T) {
         tester(200, "")
 
         _ = os.Setenv("APP_ALLOW_DUPE_URL", "0")
-        tester(409, "the url is already shortened")
+        tester(409, "url is already shortened")
     })
 }
