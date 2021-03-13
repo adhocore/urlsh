@@ -84,7 +84,7 @@
             "{{shortCode}}"
           ]
         },
-        "description": "# GET /{{shortCode}}\n\nRedirects the shortcode to original long URL.\n\n## Response payload\n\nIn case short code exists it responds with 302 redirect.\n\nIf the short code is expired or deleted, it responds like so:\n\n```json\n{\n    \"status\": 410,\n    \"message\": \"requested resource is not available\"\n}\n```\n"
+        "description": "# GET /{{shortCode}}\n\nRedirects the shortcode to original long URL.\n\n## Response payload\n\nIn case short code exists it responds with 301 redirect.\n\nIf the short code is expired or deleted, it responds like so:\n\n```json\n{\n    \"status\": 410,\n    \"message\": \"requested resource is not available\"\n}\n```\n"
       },
       "response": []
     },

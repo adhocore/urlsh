@@ -68,7 +68,7 @@ func LookupOriginURL(shortCode string) (model.URL, int, bool) {
         return urlModel, http.StatusGone, false
     }
 
-    return urlModel, http.StatusFound, false
+    return urlModel, http.StatusMovedPermanently, false
 }
 
 // IncrementHits increments hit counter for given shortCode just before serving redirection

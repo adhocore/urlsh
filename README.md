@@ -125,7 +125,7 @@ Redirects the shortcode to original long URL.
 
 ##### Response payload
 
-In case short code exists it responds with 302 redirect.
+In case short code exists it responds with 301 redirect.
 
 If the short code is expired or deleted, it responds like so:
 

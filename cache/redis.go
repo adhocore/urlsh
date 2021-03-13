@@ -70,7 +70,7 @@ func LookupURL(shortCode string) (model.URL, int) {
         return urlModel, http.StatusGone
     }
 
-    return urlModel, http.StatusFound
+    return urlModel, http.StatusMovedPermanently
 }
 
 // DeactivateURL deactivates cache of an expired/deleted model.URL
