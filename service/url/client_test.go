@@ -9,10 +9,10 @@ func TestLookupOriginURL(t *testing.T) {
     t.Run("lookup origin url", func(t *testing.T) {
         shortCode := prepare().ShortCode
 
-        t.Run("lookup - 302", func(t *testing.T) {
+        t.Run("lookup - 301", func(t *testing.T) {
             urlModel, status, _ := LookupOriginURL(shortCode)
-            if status != 302 {
-                t.Errorf("unexpected status: wanted 302, go %v", status)
+            if status != 301 {
+                t.Errorf("unexpected status: wanted 301, go %v", status)
             }
             if !strings.Contains(urlModel.OriginURL, "http://localhost/some/long/url/") {
                 t.Errorf("got unexpected origin url %v", urlModel.OriginURL)

@@ -35,7 +35,7 @@ func ServeShortURL(res http.ResponseWriter, req *http.Request) {
         res.Header().Add("X-Cached", "true")
     }
 
-    if status != http.StatusFound {
+    if status != http.StatusMovedPermanently {
         response.JSON(res, status, response.Body{"message": "requested resource is not available"})
         return
     }

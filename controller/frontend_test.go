@@ -30,9 +30,9 @@ func TestServeShortURL(t *testing.T) {
         resp := request("POST", "/api/urls", TestBody{"url": url}, CreateShortURL)
         shortCode := resp.assertContains("short_code", t).(string)
 
-        t.Run("302", func(t *testing.T) {
+        t.Run("301", func(t *testing.T) {
             resp := request("GET", "/" + shortCode, TestBody{}, ServeShortURL)
-            resp.assertStatus(302, t)
+            resp.assertStatus(301, t)
         })
 
         t.Run("404", func(t *testing.T) {
