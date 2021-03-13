@@ -72,9 +72,9 @@ Normally test db is already prepared if you use `docker-compose`.
 ---
 ## API Endpoints
 
-### GET /
+### GET /status
 
-Index route for health-check &/or default landing.
+Status route for health/status check.
 
 #### Response payload
 
