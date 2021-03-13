@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>URLSH | Shorten a long and complex URL</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
+  <style type="text/css">
+    .icon .fas.is-left {
+      height: 0.2em;
+      width: 0.4em;
+      font-size: 1.5em;
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+<div class="container is-fluid xhas-text-centered">
+  <div class="hero">
+    <div class="hero-body">
+      <h1 class="title">Shorten a long URL</h1>
+      <form id="url-form" onsubmit="return shortenUrl()">
+        <div class="field">
+          <div class="control has-icons-left has-icons-right">
+            <span class="icon"><i class="fas fa-link is-left"></i></span>
+            <input class="input is-danger is-large" type="url" required="required" placeholder="Paste or type long URL here" name="url">
+          </div>
+          <p class="help is-danger">URL is required, only ftp and http(s) supported</p>
+        </div>
+
+        <div class="field">
+          <div class="control has-icons-left has-icons-right">
+            <span class="icon is-large"><i class="fas fa-hashtag is-left"></i></span>
+            <input class="input is-success is-large" type="text" placeholder="Comma separated keywords" name="keywords">
+          </div>
+          <p class="help is-success">Keywords are optional, if provided can be used to search</p>
+        </div>
+
+        <div class="field">
+          <div class="control has-icons-left has-icons-right">
+            <span class="icon is-large"><i class="fas fa-clock is-left"></i></span>
+            <input class="input is-info is-large" type="date" name="expires_on">
+          </div>
+          <p class="help is-info">Expiry date is optional, if provided short URLs expire on that date</p>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <button id="button" class="button is-primary is-large">Shorten</button>
+            <button id="copy" class="button is-success is-large hidden" onclick="return copyShortUrl()">
+              Copy Short URL
+            </button>
+          </div>
+          <p class="help" id="info">&nbsp;</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+const form = document.getElementById('url-form')
+const butn = document.getElementById('button')
+const info = document.getElementById('info')
+const copy = document.getElementById('copy')
+
+function shortenUrl() {
+  if (butn.classList.contains('is-loading')) return false
+
+  const formData = new FormData(form)
+  const payload = {
+    url: formData.get('url'),
+    keywords: formData.get('keywords') ? formData.get('keywords').split(',').map(k => k.trim()) : [],
+    expires_on: formData.get('expires_on') ? `${formData.get('expires_on')} 23:59:59` : '',
+  }
+
+  butn.classList.add('is-loading')
+
+  fetch('/api/urls', {body: JSON.stringify(payload), method: 'POST', headers: {'Accept': 'application/json'}})
+    .then(res => res.json())
+    .then(renderResponse)
+    .catch(_ => info.innerText = 'unknown error')
+
+  return false
+}
+
+function copyShortUrl() {
+  navigator.clipboard.writeText(copy.dataset.shortUrl).then(_ => {
+    copy.innerText = 'Copied to Clipboard'
+    setTimeout(_ => copy.classList.add('hidden'), 1500)
+  })
+
+  return false
+}
+
+function renderResponse(data) {
+  butn.classList.remove('is-loading')
+  info.classList.remove('is-danger', 'is-success', 'is-info')
+  info.classList.add({200: 'is-primary', 409: 'is-info'}[data.status] || 'is-danger')
+
+  if (!data.short_code) {
+    info.innerText = data.message || 'unknown error'
+
+    return
+  }
+
+  const shortUrl = `${document.location.protocol}//${document.location.host}/${data.short_code}`
+
+  copy.innerText = 'Copy Short URL'
+  copy.classList.remove('hidden')
+  copy.dataset.shortUrl = shortUrl
+
+  info.innerText = `Short URL: ${shortUrl}`
+}
+</script>
+</body>
+</html>
