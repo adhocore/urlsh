@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <title>URLSH | Shorten a long and complex URL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
-  <style type="text/css">
+  <style>
     .icon .fas.is-left {
       height: 0.45em;
       width: 0.45em;
@@ -18,11 +18,11 @@
   <div class="hero">
     <div class="hero-body">
       <h1 class="title">Shorten a long URL</h1>
-      <form id="url-form" onsubmit="return shortenUrl()">
+      <form id="url-form" method="POST" onsubmit="return shortenUrl()">
         <div class="field">
           <div class="control has-icons-left">
             <span class="icon"><i class="fas fa-link is-left"></i></span>
-            <input class="input is-danger is-medium" type="url" required="required" placeholder="Long URL here" name="url">
+            <input class="input is-danger is-medium" id="long" type="url" required="required" placeholder="Long URL here" name="url">
           </div>
           <p class="help is-danger">URL is required, only ftp and http(s) supported</p>
         </div>
@@ -53,10 +53,13 @@
           <p class="help is-medium" id="info">&nbsp;</p>
         </div>
       </form>
+      <h4 class="subtitle">
+        Source code: <a target="_blank" href="https://github.com/adhocore/urlsh">adhocore/urlsh</a>
+      </h4>
     </div>
   </div>
 </div>
-<script type="text/javascript">
+<script>
 const form = document.getElementById('url-form')
 const butn = document.getElementById('button')
 const info = document.getElementById('info')
@@ -76,7 +79,7 @@ function shortenUrl() {
 
   fetch('/api/urls', {body: JSON.stringify(payload), method: 'POST', headers: {'Accept': 'application/json'}})
     .then(res => res.json())
-    .then(renderResponse)
+    .then(data => renderResponse({...data, url: payload.url}))
     .catch(_ => info.innerText = 'unknown error')
 
   return false
