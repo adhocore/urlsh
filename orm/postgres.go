@@ -1,7 +1,10 @@
 package orm
 
 import (
+    "fmt"
     "log"
+    "net"
+    "net/url"
     "os"
     "strings"
     "sync"
@@ -17,17 +20,24 @@ var conn *gorm.DB
 // pgConnect connects to postgres db
 // It returns gorm DB instance.
 func pgConnect() *gorm.DB {
-    dsn := os.Getenv("APP_DB_DSN")
+    dsn := os.Getenv("DATABASE_URL")
     if dsn == "" {
-        log.Fatal("Database configuration DSN missing, Pass in APP_DB_DSN env")
+        log.Fatal("Database configuration DSN missing, Pass in DATABASE_URL env")
     }
+
+    parse, _ := url.Parse(dsn)
+    dbname := strings.Trim(parse.Path, "/")
+    pass, _ := parse.User.Password()
+    host, port, _ := net.SplitHostPort(parse.Host)
 
     logLevel, env := logger.Warn, os.Getenv("APP_ENV")
     if env == "prod" {
         logLevel = logger.Silent
     } else if env == "test" {
-        dsn = strings.Replace(dsn, "dbname=", "dbname=test_", 1)
+        dbname = "test_" + dbname
     }
+
+    dsn = fmt.Sprintf("host=%s port=%s user=%s password=%s database=%s", host, port, parse.User.Username(), pass, dbname)
 
     db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
         Logger: logger.Default.LogMode(logLevel),

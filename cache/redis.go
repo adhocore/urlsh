@@ -2,6 +2,7 @@ package cache
 
 import (
     "net/http"
+    "net/url"
     "os"
     "sync"
     "time"
@@ -15,18 +16,19 @@ var pool *redis.Pool
 var prefix = "url:"
 
 func connect() {
-    cacheHost := os.Getenv("APP_CACHE_HOST")
-    if cacheHost == "" {
+    dsn := os.Getenv("REDIS_URL")
+    if dsn == "" {
         return
     }
+
+    parse, _ := url.Parse(dsn)
+    pass, _ := parse.User.Password()
 
     pool = &redis.Pool{
         MaxIdle: 12,
         IdleTimeout: 300 * time.Second,
         Dial: func() (redis.Conn, error) {
-            user, pass := os.Getenv("APP_CACHE_USER"), os.Getenv("APP_CACHE_PASS")
-
-            return redis.Dial("tcp", cacheHost, redis.DialUsername(user), redis.DialPassword(pass))
+            return redis.Dial("tcp", parse.Host, redis.DialUsername(parse.User.Username()), redis.DialPassword(pass))
         },
     }
 }
@@ -35,13 +37,11 @@ func connect() {
 func Connection() redis.Conn {
     once.Do(connect)
 
-    if nil == pool {
-        return nil
+    if nil != pool {
+        return pool.Get()
     }
 
-    conn := pool.Get()
-
-    return conn
+    return nil
 }
 
 // LookupURL looks up if certain short code is popular enough to be in cache
