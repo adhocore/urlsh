@@ -22,19 +22,19 @@ It should be configured using env variables.
 
 Please check [.env.example](./.env.example) for available variables and explanation.
 
-`APP_DB_DSN` is always required and is string of the following form:
+`DATABASE_URL` is always required and is string of the following form:
 
 ```
-APP_DB_DSN=host=<str> port=<int> dbname=<str> user=<str> password=<pwd>
+DATABASE_URL=postgres://user:pass@host:port/dbname
 ```
 
-When running *urlsh* with docker-compose, the **preferred** way, `APP_DB_DSN` is
+When running *urlsh* with docker-compose, the **preferred** way, `DATABASE_URL` is
 automatically set from [`POSTGRES_*`](https://hub.docker.com/_/postgres) variables.
 
 > Please note that `urlsh` does not ship with `.env` loader so to run it in bare metal,
 one needs to use `export KEY=VALUE` or `source .env` manually.
 
-If `APP_CACHE_HOST` is provided with redis host:port, then it will cache popular urls,
+If `REDIS_URL` is provided with `redis://host:port`, then it will cache popular urls,
 the popularity threshold is hard coded to minimal value in `common.constant`.
 The cache will sync when short url is deleted and sometimes when expired.
 The hit counters will however sync in realtime.
