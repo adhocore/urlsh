@@ -13,7 +13,7 @@ services:
     env_file:
       - .env
     environment:
-      - APP_DB_DSN=host=urlshdb port=5432 user=${POSTGRES_USER:-postgres} password=${POSTGRES_PASSWORD:-postgres} dbname=urlsh sslmode=disable
+      - POSTGRES_HOST=urlshdb
     depends_on:
       - urlshdb
       - urlshcache
