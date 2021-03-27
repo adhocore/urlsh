@@ -13,9 +13,6 @@ func getPort() string {
     if port := os.Getenv("PORT"); port != "" {
         return port
     }
-    if port := os.Getenv("APP_PORT"); port != "" {
-        return port
-    }
 
     return "1000"
 }
