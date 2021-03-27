@@ -22,13 +22,18 @@ func connect() {
     }
 
     parse, _ := url.Parse(dsn)
+    user := parse.User.Username()
     pass, _ := parse.User.Password()
+
+    if user == "h" {
+        user = ""
+    }
 
     pool = &redis.Pool{
         MaxIdle: 12,
         IdleTimeout: 300 * time.Second,
         Dial: func() (redis.Conn, error) {
-            return redis.Dial("tcp", parse.Host, redis.DialUsername(parse.User.Username()), redis.DialPassword(pass))
+            return redis.Dial("tcp", parse.Host, redis.DialUsername(user), redis.DialPassword(pass))
         },
     }
 }
