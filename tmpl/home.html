@@ -128,7 +128,7 @@ function renderResponse(data) {
 
   const shortUrl = `${document.location.protocol}//${document.location.host}/${data.short_code}`
 
-  info.innerText = ''
+  info.innerHTML = '&nbsp;'
   copy.innerText = `Copy ${document.location.host}/${data.short_code}`
   copy.classList.remove('is-hidden')
   copy.dataset.shortUrl = shortUrl
