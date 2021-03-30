@@ -10,7 +10,7 @@ import (
 )
 
 // URLBlackListRegex is regex to filter unwanted urls
-const URLBlackListRegex = "(xxx)"
+const URLBlackListRegex = "(xxx|localhost|127.0.0.1|.lvh.me)"
 
 // URLInput defines structure for create short code url request
 type URLInput struct {
