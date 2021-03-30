@@ -14,7 +14,7 @@ func getPort() string {
 		return port
 	}
 
-	return "1000"
+	return "2000"
 }
 
 func main() {

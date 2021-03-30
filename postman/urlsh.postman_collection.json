@@ -66,7 +66,7 @@
             "urls"
           ]
         },
-        "description": "# POST /api/urls\n\nCreates a new short code for given URL.\n\n## Request example\n\n```json\n{\n    \"url\": \"http://somedomain.com/some/very/long/url\",\n    \"expires_on\": \"\",\n    \"keywords\": [\"key\", \"word\"]\n}\n```\n\n## Response example\n\n```json\n{\n    \"status\": 200,\n    \"short_code\": \"qaFxz\",\n    \"short_url\": \"http://localhost:1000/qaFxz\"\n}\n```\n"
+        "description": "# POST /api/urls\n\nCreates a new short code for given URL.\n\n## Request example\n\n```json\n{\n    \"url\": \"http://somedomain.com/some/very/long/url\",\n    \"expires_on\": \"\",\n    \"keywords\": [\"key\", \"word\"]\n}\n```\n\n## Response example\n\n```json\n{\n    \"status\": 200,\n    \"short_code\": \"qaFxz\",\n    \"short_url\": \"http://localhost:2000/qaFxz\"\n}\n```\n"
       },
       "response": []
     },

@@ -19,7 +19,7 @@ func TestListURL(t *testing.T) {
 		rand.Seed(time.Now().UTC().UnixNano())
 
 		_ = os.Setenv("APP_ALLOW_DUPE_URL", "1")
-		url := fmt.Sprintf("http://localhost:1000/very/long/url-%v", rand.Intn(1000000))
+		url := fmt.Sprintf("http://localhost:2000/very/long/url-%v", rand.Intn(1000000))
 		body := TestBody{"url": url, "expires_on": "2030-01-01 00:00:00", "keywords": []string{"local"}}
 		resp := request("POST", "/api/urls", body, CreateShortURL)
 
