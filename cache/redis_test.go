@@ -27,7 +27,7 @@ func TestConnection(t *testing.T) {
 
 func TestDeactivateURL(t *testing.T) {
 	t.Run("deactivate", func(t *testing.T) {
-		urlModel := model.URL{ShortCode: "testCode", OriginURL: "http://localhost/url"}
+		urlModel := model.URL{ShortCode: "testCode", OriginURL: "http://local-host/url"}
 
 		DeactivateURL(urlModel)
 		if !hasURL(urlModel) {
@@ -38,7 +38,7 @@ func TestDeactivateURL(t *testing.T) {
 
 func TestLookupURL(t *testing.T) {
 	t.Run("save + lookup", func(t *testing.T) {
-		urlModel := model.URL{ShortCode: util.RandomString(8), OriginURL: "http://localhost/abc/def/ghi"}
+		urlModel := model.URL{ShortCode: util.RandomString(8), OriginURL: "http://local-host/abc/def/ghi"}
 
 		t.Run("save", func(t *testing.T) {
 			SavePopularURL(urlModel, true)
