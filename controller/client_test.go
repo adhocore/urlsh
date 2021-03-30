@@ -40,7 +40,7 @@ func TestCreateShortURL(t *testing.T) {
 
 	t.Run("create short url - OK", func(t *testing.T) {
 		tester := func(status int, message string) {
-			body := TestBody{"url": "http://localhost:1000/very/long/url", "expires_on": "2030-01-01 00:00:00"}
+			body := TestBody{"url": "http://localhost:2000/very/long/url", "expires_on": "2030-01-01 00:00:00"}
 			resp := request("POST", "/api/urls", body, CreateShortURL)
 
 			resp.assertStatus(status, t)

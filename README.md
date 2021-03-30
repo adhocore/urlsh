@@ -62,7 +62,7 @@ cp .example.env .env
 docker-compose up
 ```
 
-After a few seconds, you should be able to browse to [localhost:1000](http://localhost:1000).
+After a few seconds, you should be able to browse to [localhost:2000](http://localhost:2000).
 
 ## Testing
 
@@ -119,7 +119,7 @@ Creates a new short code for given URL.
 {
     "status": 200,
     "short_code": "qaFxz",
-    "short_url": "http://localhost:1000/qaFxz"
+    "short_url": "http://localhost:2000/qaFxz"
 }
 ```
 
