@@ -122,6 +122,7 @@ function renderResponse(data) {
 
   if (!data.short_code) {
     info.innerText = data.message || 'unknown error'
+    copy.classList.add('is-hidden')
 
     return
   }
