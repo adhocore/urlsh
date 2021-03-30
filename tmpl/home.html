@@ -20,6 +20,9 @@
     .th-url {
       width: 90%;
     }
+    .copy-url {
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -145,19 +148,10 @@ function renderResponse(data) {
 
 function renderHistory(code, url, idx) {
   const row  = hist.insertRow(idx)
-  const col1 = row.insertCell()
-  const col2 = row.insertCell()
-  const link = document.createElement('a')
-  const trnk = url.length > 150 ? url.substring(0, 150) + '...' : url
 
-  row.id     = code
-  link.title = url
-  link.href  = `${base}/${code}`
-
-  link.setAttribute('target', '_blank')
-  link.appendChild(document.createTextNode(code))
-  col1.appendChild(link)
-  col2.appendChild(document.createTextNode(trnk))
+  row.insertCell().innerHTML = `<a href="${base}/${code}" target="_blank" title="${url}">${code}</a>
+    <span class="icon"><i class="fas fa-copy copy-url" title="Copy URL" data-short-url="${base}/${code}"></i></span>`
+  row.insertCell().innerText = url.length > 150 ? url.substring(0, 150) + '...' : url
 }
 
 function loadHistory() {
@@ -170,6 +164,11 @@ function loadHistory() {
 }
 
 setTimeout(loadHistory, 500)
+document.addEventListener('click', e => {
+  if (e.target && e.target.classList.contains('copy-url')) {
+    navigator.clipboard.writeText(e.target.dataset.shortUrl)
+  }
+})
 </script>
 </body>
 </html>
