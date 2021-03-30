@@ -12,7 +12,7 @@ import (
 func prepare() request.URLFilter {
 	rand.Seed(time.Now().UTC().UnixNano())
 
-	longURL := fmt.Sprintf("http://localhost/some/long/url/%v", rand.Intn(1000000))
+	longURL := fmt.Sprintf("http://local-host/some/long/url/%v", rand.Intn(1000000))
 	shortCode, _ := CreateURLShortCode(request.URLInput{URL: longURL, Keywords: []string{"testing"}})
 
 	return request.URLFilter{ShortCode: shortCode, Keyword: "testing"}

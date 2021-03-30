@@ -40,25 +40,25 @@ func TestURLInput_Validate(t *testing.T) {
 	})
 
 	t.Run("keywords", func(t *testing.T) {
-		input := URLInput{URL: "http://localhost", Keywords: make([]string, 11)}
+		input := URLInput{URL: "http://local-host", Keywords: make([]string, 11)}
 
 		tester(input, common.ErrKeywordsCount, t)
 	})
 
 	t.Run("keyword length", func(t *testing.T) {
-		input := URLInput{URL: "http://localhost", Keywords: []string{"x"}}
+		input := URLInput{URL: "http://local-host", Keywords: []string{"x"}}
 
 		tester(input, common.ErrKeywordLength, t)
 	})
 
 	t.Run("invalid date", func(t *testing.T) {
-		input := URLInput{URL: "http://localhost", ExpiresOn: "2030x01x01x00x00x00"}
+		input := URLInput{URL: "http://local-host", ExpiresOn: "2030x01x01x00x00x00"}
 
 		tester(input, common.ErrInvalidDate, t)
 	})
 
 	t.Run("validate OK", func(t *testing.T) {
-		input := URLInput{URL: "http://localhost", ExpiresOn: "2030-01-01 00:00:00"}
+		input := URLInput{URL: "http://local-host", ExpiresOn: "2030-01-01 00:00:00"}
 
 		if input.Validate() != nil {
 			t.Errorf("valid data should not give error")
@@ -68,19 +68,19 @@ func TestURLInput_Validate(t *testing.T) {
 
 func TestURLInput_ValidateExpiry(t *testing.T) {
 	t.Run("invalid expiry", func(t *testing.T) {
-		input := URLInput{URL: "http://localhost", ExpiresOn: ""}
+		input := URLInput{URL: "http://local-host", ExpiresOn: ""}
 
 		tester(input, nil, t)
 	})
 
 	t.Run("invalid expiry", func(t *testing.T) {
-		input := URLInput{URL: "http://localhost", ExpiresOn: "2020-01-01"}
+		input := URLInput{URL: "http://local-host", ExpiresOn: "2020-01-01"}
 
 		tester(input, common.ErrInvalidDate, t)
 	})
 
 	t.Run("past expiry", func(t *testing.T) {
-		input := URLInput{URL: "http://localhost", ExpiresOn: "2020-01-01 00:00:00"}
+		input := URLInput{URL: "http://local-host", ExpiresOn: "2020-01-01 00:00:00"}
 
 		tester(input, common.ErrPastExpiration, t)
 	})

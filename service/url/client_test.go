@@ -14,7 +14,7 @@ func TestLookupOriginURL(t *testing.T) {
 			if status != 301 {
 				t.Errorf("unexpected status: wanted 301, go %v", status)
 			}
-			if !strings.Contains(urlModel.OriginURL, "http://localhost/some/long/url/") {
+			if !strings.Contains(urlModel.OriginURL, "http://local-host/some/long/url/") {
 				t.Errorf("got unexpected origin url %v", urlModel.OriginURL)
 			}
 		})
