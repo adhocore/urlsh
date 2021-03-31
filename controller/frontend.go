@@ -13,6 +13,18 @@ func Index(res http.ResponseWriter, req *http.Request) {
 	http.ServeFile(res, req, "tmpl/home.html")
 }
 
+// Favicon is the controller for favicon.ico
+// It responds to `GET /favicon.ico` and does not require auth token.
+func Favicon(res http.ResponseWriter, req *http.Request) {
+	http.ServeFile(res, req, "tmpl/u.png")
+}
+
+// Robots is the controller for robots.txt
+// It responds to `GET /favicon.ico` and does not require auth token.
+func Robots(res http.ResponseWriter, req *http.Request) {
+	http.ServeFile(res, req, "tmpl/robots.txt")
+}
+
 // Status is the controller for health/status check
 // It responds to `GET /status` and does not require auth token.
 func Status(res http.ResponseWriter, _ *http.Request) {
