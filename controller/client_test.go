@@ -17,7 +17,7 @@ func TestCreateShortURL(t *testing.T) {
 	})
 
 	t.Run("create short url - invalid url", func(t *testing.T) {
-		resp := request("POST", "/api/urls", TestBody{"url": "http:/localhost"}, CreateShortURL)
+		resp := request("POST", "/api/urls", TestBody{"url": "http:/local-host"}, CreateShortURL)
 
 		resp.assertStatus(422, t)
 		resp.assertKeyValue("message", common.ErrInvalidURL.Error(), t)
