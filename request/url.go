@@ -26,6 +26,23 @@ type URLFilter struct {
 	Page      string `json:"page"`
 }
 
+// https://github.com/asaskevich/govalidator/blob/master/patterns.go
+var (
+	IP                string = `(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))`
+	URLSchema         string = `((ftp|https?):\/\/)`
+	URLUsername       string = `(\S+(:\S*)?@)`
+	URLPath           string = `((\/|\?|#)[^\s]*)`
+	URLPort           string = `(:(\d{1,5}))`
+	URLIP             string = `([1-9]\d?|1\d\d|2[01]\d|22[0-3]|24\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){2}(?:\.([0-9]\d?|1\d\d|2[0-4]\d|25[0-5]))`
+	URLSubdomain      string = `((www\.)|([a-zA-Z0-9]+([-_\.]?[a-zA-Z0-9])*[a-zA-Z0-9]\.[a-zA-Z0-9]+))`
+	URL                      = `^` + URLSchema + `?` + URLUsername + `?` + `((` + URLIP + `|(\[` + IP + `\])|(([a-zA-Z0-9]([a-zA-Z0-9-_]+)?[a-zA-Z0-9]([-\.][a-zA-Z0-9]+)*)|(` + URLSubdomain + `?))?(([a-zA-Z\x{00a1}-\x{ffff}0-9]+-?-?)*[a-zA-Z\x{00a1}-\x{ffff}0-9]+)(?:\.([a-zA-Z\x{00a1}-\x{ffff}]{1,}))?))\.?` + URLPort + `?` + URLPath + `?$`
+)
+
+var (
+	urlRe = regexp.MustCompile(URL)
+	bklRe = regexp.MustCompile(URLBlackListRegex)
+)
+
 // Validate validates the url input before saving to db
 // It returns error if something is not valid.
 func (input URLInput) Validate() error {
@@ -33,16 +50,16 @@ func (input URLInput) Validate() error {
 		return common.ErrInvalidURLLen
 	}
 
-	if match, _ := regexp.MatchString("^(f|ht)tps?://+", input.URL); !match {
-		return common.ErrInvalidURL
+	if bklRe.MatchString(input.URL) {
+		return common.ErrBlacklistedURL
 	}
 
 	if _, err := url.ParseRequestURI(input.URL); err != nil {
 		return common.ErrInvalidURL
 	}
 
-	if match, _ := regexp.MatchString(URLBlackListRegex, input.URL); match {
-		return common.ErrBlacklistedURL
+	if !urlRe.MatchString(input.URL) {
+		return common.ErrInvalidURL
 	}
 
 	if len(input.Keywords) > 10 {
