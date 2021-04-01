@@ -33,10 +33,10 @@ func TestURLInput_Validate(t *testing.T) {
 		tester(input, common.ErrInvalidURL, t)
 	})
 
-	t.Run("blacklist url", func(t *testing.T) {
+	t.Run("filtered url", func(t *testing.T) {
 		input := URLInput{URL: "http://localhost/xxx"}
 
-		tester(input, common.ErrBlacklistedURL, t)
+		tester(input, common.ErrFilteredURL, t)
 	})
 
 	t.Run("keywords", func(t *testing.T) {
