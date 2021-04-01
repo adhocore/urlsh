@@ -21,8 +21,8 @@ func TestURLInput_Validate(t *testing.T) {
 		tester(input, common.ErrInvalidURLLen, t)
 	})
 
-	t.Run("validate empty", func(t *testing.T) {
-		input := URLInput{URL: "xyz://x/y/z"}
+	t.Run("validate scheme", func(t *testing.T) {
+		input := URLInput{URL: "xyz://xyx/xyz/z"}
 
 		tester(input, common.ErrInvalidURL, t)
 	})
