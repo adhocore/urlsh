@@ -23,11 +23,11 @@ func TestCreateShortURL(t *testing.T) {
 		resp.assertKeyValue("message", common.ErrInvalidURL.Error(), t)
 	})
 
-	t.Run("create short url - blacklist url", func(t *testing.T) {
+	t.Run("create short url - filter url", func(t *testing.T) {
 		resp := request("POST", "/api/urls", TestBody{"url": "http://localhost/xxx"}, CreateShortURL)
 
 		resp.assertStatus(422, t)
-		resp.assertKeyValue("message", "url matches blacklist pattern", t)
+		resp.assertKeyValue("message", "url matches filter pattern", t)
 	})
 
 	t.Run("create short url - past expiry", func(t *testing.T) {

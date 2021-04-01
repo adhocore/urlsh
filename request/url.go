@@ -9,9 +9,6 @@ import (
 	"github.com/adhocore/urlsh/common"
 )
 
-// URLBlackListRegex is regex to filter unwanted urls
-const URLBlackListRegex = "(xxx|localhost|127\\.0\\.0\\.1|\\.lvh\\.me|\\.local|urlssh\\.)"
-
 // URLInput defines structure for create short code url request
 type URLInput struct {
 	URL       string   `json:"url" binding:"required"`
@@ -26,7 +23,7 @@ type URLFilter struct {
 	Page      string `json:"page"`
 }
 
-// https://github.com/asaskevich/govalidator/blob/master/patterns.go
+// @see https://github.com/asaskevich/govalidator/blob/master/patterns.go
 var (
 	IP                string = `(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))`
 	URLSchema         string = `((ftp|https?):\/\/)`
@@ -35,23 +32,29 @@ var (
 	URLPort           string = `(:(\d{1,5}))`
 	URLIP             string = `([1-9]\d?|1\d\d|2[01]\d|22[0-3]|24\d|25[0-5])(\.(\d{1,2}|1\d\d|2[0-4]\d|25[0-5])){2}(?:\.([0-9]\d?|1\d\d|2[0-4]\d|25[0-5]))`
 	URLSubdomain      string = `((www\.)|([a-zA-Z0-9]+([-_\.]?[a-zA-Z0-9])*[a-zA-Z0-9]\.[a-zA-Z0-9]+))`
-	URL                      = `^` + URLSchema + `?` + URLUsername + `?` + `((` + URLIP + `|(\[` + IP + `\])|(([a-zA-Z0-9]([a-zA-Z0-9-_]+)?[a-zA-Z0-9]([-\.][a-zA-Z0-9]+)*)|(` + URLSubdomain + `?))?(([a-zA-Z\x{00a1}-\x{ffff}0-9]+-?-?)*[a-zA-Z\x{00a1}-\x{ffff}0-9]+)(?:\.([a-zA-Z\x{00a1}-\x{ffff}]{1,}))?))\.?` + URLPort + `?` + URLPath + `?$`
+
+	URLMinLength      int    = 15
+	URLMaxLength      int    = 2048
+	KeywordRegex      string = `^[a-zA-Z0-9-_]+$`
+	URLRegex          string = `^` + URLSchema + `?` + URLUsername + `?` + `((` + URLIP + `|(\[` + IP + `\])|(([a-zA-Z0-9]([a-zA-Z0-9-_]+)?[a-zA-Z0-9]([-\.][a-zA-Z0-9]+)*)|(` + URLSubdomain + `?))?(([a-zA-Z\x{00a1}-\x{ffff}0-9]+-?-?)*[a-zA-Z\x{00a1}-\x{ffff}0-9]+)(?:\.([a-zA-Z\x{00a1}-\x{ffff}]{1,}))?))\.?` + URLPort + `?` + URLPath + `?$`
+	URLFilterRegex    string = `(xxx|localhost|127\.0\.0\.1|\.lvh\.me|\.local|urlss?h\.)`
 )
 
 var (
-	urlRe = regexp.MustCompile(URL)
-	bklRe = regexp.MustCompile(URLBlackListRegex)
+	kwRe     = regexp.MustCompile(KeywordRegex)
+	urlRe    = regexp.MustCompile(URLRegex)
+	filterRe = regexp.MustCompile(URLFilterRegex)
 )
 
 // Validate validates the url input before saving to db
 // It returns error if something is not valid.
 func (input URLInput) Validate() error {
-	if l := len(input.URL); l < 7 || l > 2048 {
+	if l := len(input.URL); l < URLMinLength || l > URLMaxLength {
 		return common.ErrInvalidURLLen
 	}
 
-	if bklRe.MatchString(input.URL) {
-		return common.ErrBlacklistedURL
+	if filterRe.MatchString(input.URL) {
+		return common.ErrFilteredURL
 	}
 
 	if _, err := url.ParseRequestURI(input.URL); err != nil {
@@ -69,6 +72,10 @@ func (input URLInput) Validate() error {
 	for _, word := range input.Keywords {
 		if l := len(word); l < 2 || l > 25 {
 			return common.ErrKeywordLength
+		}
+
+		if !kwRe.MatchString(word) {
+			return common.ErrInvalidKeyword
 		}
 	}
 
