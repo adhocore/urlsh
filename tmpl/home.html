@@ -19,10 +19,10 @@
       width: 100%;
     }
     .th-code {
-      width: 10%;
+      width: 12%;
     }
     .th-url {
-      width: 90%;
+      width: 88%;
     }
     .copy-url {
       cursor: pointer;
@@ -170,7 +170,10 @@ function loadHistory() {
 setTimeout(loadHistory, 500)
 document.addEventListener('click', e => {
   if (e.target && e.target.classList.contains('copy-url')) {
-    navigator.clipboard.writeText(e.target.dataset.shortUrl)
+    navigator.clipboard.writeText(e.target.dataset.shortUrl).then(_ => {
+      e.target.classList.replace('fa-copy', 'fa-check')
+      setTimeout(_ => e.target.classList.replace('fa-check', 'fa-copy'), 2000)
+    })
   }
 })
 </script>
