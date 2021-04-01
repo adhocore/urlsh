@@ -26,7 +26,7 @@ func TestNotFound(t *testing.T) {
 
 func TestServeShortURL(t *testing.T) {
 	t.Run("serve short url", func(t *testing.T) {
-		url := fmt.Sprintf("http://urlsh.me/urlsh/xyz/me/%v", rand.Intn(100000))
+		url := fmt.Sprintf("http://urls.me/urlsh/xyz/me/%v", rand.Intn(100000))
 		resp := request("POST", "/api/urls", TestBody{"url": url}, CreateShortURL)
 		shortCode := resp.assertContains("short_code", t).(string)
 
