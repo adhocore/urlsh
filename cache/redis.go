@@ -18,16 +18,15 @@ var prefix = "url:"
 func connect() {
 	dsn := os.Getenv("REDIS_URL")
 	if dsn == "" {
+		dsn = os.Getenv("HEROKU_REDIS_MAUVE_URL")
+	}
+	if dsn == "" {
 		return
 	}
 
 	parse, _ := url.Parse(dsn)
 	user := parse.User.Username()
 	pass, _ := parse.User.Password()
-
-	if user == "h" {
-		user = ""
-	}
 
 	pool = &redis.Pool{
 		MaxIdle:     12,
