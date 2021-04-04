@@ -111,7 +111,7 @@ func validateURLInput(input request.URLInput) (string, error) {
 	}
 
 	if _, err := net.LookupIP(input.Host); err != nil {
-		return common.ErrInvalidURL
+		return "", common.ErrInvalidURL
 	}
 
 	return "", nil
