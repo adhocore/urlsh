@@ -23,8 +23,8 @@ func main() {
 	server := &http.Server{
 		Addr:         ":" + port,
 		Handler:      router.RegisterHandlers(),
-		ReadTimeout:  10 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		ReadTimeout:  1 * time.Second,
+		WriteTimeout: 1 * time.Second,
 	}
 
 	log.Printf("Server running on port %v", port)
