@@ -6,9 +6,6 @@ It does not use external libraries except the [`gorm`](http://gorm.io) for
 [`postgres`](https://github.com/go-gorm/postgres) database and minimal redis
 module [redigo](https://github.com/gomodule/redigo).
 
-It registers itself as Go module `github.com/adhocore/urlsh`
-(however it has not been submitted to Go package registry for public usage).
-
 ![URLSH](./tmpl/urlsh.png)
 
 # Usage
