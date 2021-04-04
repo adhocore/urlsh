@@ -110,9 +110,11 @@ func validateURLInput(input request.URLInput) (string, error) {
 		return "", nil
 	}
 
-	_, err := net.LookupIP(input.Host)
+	if _, err := net.LookupIP(input.Host); err != nil {
+		return common.ErrInvalidURL
+	}
 
-	return "", err
+	return "", nil
 }
 
 // getUniqueShortCode gets unique random string to use as short code
