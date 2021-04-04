@@ -88,8 +88,8 @@ func allowDupeURL() bool {
 	return os.Getenv("APP_ALLOW_DUPE_URL") == "1"
 }
 
-// checkUrlReach checks is app is configured to check if origin url host is reachable
-func checkUrlReach() bool {
+// checkURLReach checks is app is configured to check if origin url host is reachable
+func checkURLReach() bool {
 	return os.Getenv("APP_CHECK_URL_REACH") == "1"
 }
 
@@ -106,7 +106,7 @@ func validateURLInput(input request.URLInput) (string, error) {
 		}
 	}
 
-	if input.Host == "" || !checkUrlReach() {
+	if input.Host == "" || !checkURLReach() {
 		return "", nil
 	}
 
