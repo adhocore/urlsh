@@ -2,6 +2,7 @@ package url
 
 import (
 	"encoding/json"
+	"net"
 	"net/http"
 	"os"
 
@@ -30,7 +31,7 @@ func CreateURLShortCodeFromRequest(req *http.Request) (string, error) {
 // CreateURLShortCode creates a new short code using request.URLInput
 // It returns created short code or error if any.
 func CreateURLShortCode(input request.URLInput) (string, error) {
-	if shortCode, err := validateURLInput(input, allowDupeURL()); err != nil {
+	if shortCode, err := validateURLInput(input); err != nil {
 		return shortCode, err
 	}
 
@@ -87,18 +88,31 @@ func allowDupeURL() bool {
 	return os.Getenv("APP_ALLOW_DUPE_URL") == "1"
 }
 
+// checkUrlReach checks is app is configured to check if origin url host is reachable
+func checkUrlReach() bool {
+	return os.Getenv("APP_CHECK_URL_REACH") == "1"
+}
+
 // validateURLInput validates given request.URLInput
 // It returns existing short code for input url if exists and validation error if any.
-func validateURLInput(input request.URLInput, allowDup bool) (string, error) {
-	if err := input.Validate(); err != nil || allowDup {
+func validateURLInput(input request.URLInput) (string, error) {
+	if err := input.Validate(); err != nil {
 		return "", err
 	}
 
-	if shortCode := getShortCodeByOriginURL(input.URL); shortCode != "" {
-		return shortCode, common.ErrURLAlreadyShort
+	if !allowDupeURL() {
+		if shortCode := getShortCodeByOriginURL(input.URL); shortCode != "" {
+			return shortCode, common.ErrURLAlreadyShort
+		}
 	}
 
-	return "", nil
+	if input.Host == "" || !checkUrlReach() {
+		return "", nil
+	}
+
+	_, err := net.LookupIP(input.Host)
+
+	return "", err
 }
 
 // getUniqueShortCode gets unique random string to use as short code
