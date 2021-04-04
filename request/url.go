@@ -1,6 +1,7 @@
 package request
 
 import (
+	"net"
 	"net/url"
 	"regexp"
 	"strconv"
@@ -14,6 +15,7 @@ type URLInput struct {
 	URL       string   `json:"url" binding:"required"`
 	ExpiresOn string   `json:"expires_on"`
 	Keywords  []string `json:"keywords"`
+	Host      string   `json:"-"`
 }
 
 // URLFilter defines structure for short code list and search request
@@ -48,7 +50,7 @@ var (
 
 // Validate validates the url input before saving to db
 // It returns error if something is not valid.
-func (input URLInput) Validate() error {
+func (input *URLInput) Validate() error {
 	if l := len(input.URL); l < URLMinLength || l > URLMaxLength {
 		return common.ErrInvalidURLLen
 	}
@@ -57,8 +59,14 @@ func (input URLInput) Validate() error {
 		return common.ErrFilteredURL
 	}
 
-	if _, err := url.ParseRequestURI(input.URL); err != nil {
+	uri, err := url.ParseRequestURI(input.URL)
+	if err != nil {
 		return common.ErrInvalidURL
+	}
+
+	input.Host = uri.Host
+	if host, _, _ := net.SplitHostPort(uri.Host); host != "" {
+		input.Host = host
 	}
 
 	if !urlRe.MatchString(input.URL) {
