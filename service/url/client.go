@@ -31,7 +31,7 @@ func CreateURLShortCodeFromRequest(req *http.Request) (string, error) {
 // CreateURLShortCode creates a new short code using request.URLInput
 // It returns created short code or error if any.
 func CreateURLShortCode(input request.URLInput) (string, error) {
-	if shortCode, err := validateURLInput(input); err != nil {
+	if shortCode, err := ValidateURLInput(input); err != nil {
 		return shortCode, err
 	}
 
@@ -95,7 +95,7 @@ func checkURLReach() bool {
 
 // validateURLInput validates given request.URLInput
 // It returns existing short code for input url if exists and validation error if any.
-func validateURLInput(input request.URLInput) (string, error) {
+func ValidateURLInput(input request.URLInput) (string, error) {
 	if err := input.Validate(); err != nil {
 		return "", err
 	}
