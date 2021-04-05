@@ -93,7 +93,7 @@ func checkURLReach() bool {
 	return os.Getenv("APP_CHECK_URL_REACH") == "1"
 }
 
-// validateURLInput validates given request.URLInput
+// ValidateURLInput validates given request.URLInput
 // It returns existing short code for input url if exists and validation error if any.
 func ValidateURLInput(input request.URLInput) (string, error) {
 	if err := input.Validate(); err != nil {

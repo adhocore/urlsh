@@ -14,6 +14,7 @@ import (
 	usrv "github.com/adhocore/urlsh/service/url"
 )
 
+// URLOutput is the structure for response sent by urlsh server
 type URLOutput struct {
 	Status     uint    `json:"status" binding:"required"`
 	ShortCode  string  `json:"short_code"`
