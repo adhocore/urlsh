@@ -10,7 +10,32 @@ module [redigo](https://github.com/gomodule/redigo).
 
 # Usage
 
+#### Web client
+
 Just visit [urlssh.xyz](https://urlssh.xyz). You can also integrate API for programmatic usage.
+
+#### Terminal client
+
+If you live inside the command line terminal, you can install a client:
+```sh
+go get github.com/adhocore/urlsh/cmd/urlshc
+```
+
+Make sure `$GOPATH` or `$HOME/go/bin` is in your `$PATH` or `%path%`, then use it like so:
+```sh
+# show help
+urlshc -h
+
+# shorten a url
+urlshc -url 'https://your.long.url/here'
+
+# shorten a url with keywords and expiry date
+urlshc -url 'https://your.long.url/here' -keywords 'word-1,word2' -expires '2022-12-31'
+
+# if you have self hosted or local instance of urlsh, pass in URLSH_HOST (with domain only)
+URLSH_HOST=https://your.urlsh-instance.com urlshc -url 'https://your.long.url/here'
+```
+
 Read below for self hosting, API integration and/or contributing to *urlsh*.
 
 ___
