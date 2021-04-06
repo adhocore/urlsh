@@ -6,7 +6,7 @@ It does not use external libraries except the [`gorm`](http://gorm.io) for
 [`postgres`](https://github.com/go-gorm/postgres) database and minimal redis
 module [redigo](https://github.com/gomodule/redigo).
 
-![URLSH](./tmpl/urlsh.png)
+![URLSH](./assets/urlsh.png)
 
 # Usage
 
