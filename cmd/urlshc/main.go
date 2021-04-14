@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"encoding/json"
 	"flag"
 	"fmt"
@@ -43,6 +44,10 @@ func input() (ureq.URLInput, error) {
 	flag.StringVar(&i.ExpiresOn, "expires", "", "Expiry date (optional, format: yyyy-mm-dd)")
 	flag.StringVar(&words, "keywords", "", "CSV keywords (optional, format: word-1,word2,word_3,...)")
 	flag.Parse()
+
+	if "" == i.URL {
+		return i, errors.New("url is required option")
+	}
 
 	if words != "" {
 		words = strings.ReplaceAll(words, ", ", ",")
