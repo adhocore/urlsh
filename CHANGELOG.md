@@ -1,3 +1,9 @@
+## [v0.1.1](https://github.com/adhocore/urlsh/releases/tag/v0.1.1) (2021-04-14)
+
+### Internal Refactors
+- **Cmd.urlshc**: Precheck missing url opt (Jitendra Adhikari) [_458d4cb_](https://github.com/adhocore/urlsh/commit/458d4cb)
+
+
 ## [v0.1.0](https://github.com/adhocore/urlsh/releases/tag/v0.1.0) (2021-04-13)
 
 ### Features
@@ -141,5 +147,3 @@
 - **Docker**: Add redis cache (Jitendra Adhikari) [_744d5eb_](https://github.com/adhocore/urlsh/commit/744d5eb)
 - **Docker**: Add docker-compose (Jitendra Adhikari) [_d2b182f_](https://github.com/adhocore/urlsh/commit/d2b182f)
 - **Docker**: Add init-test-db (Jitendra Adhikari) [_5832a09_](https://github.com/adhocore/urlsh/commit/5832a09)
-
-
