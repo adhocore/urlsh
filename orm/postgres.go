@@ -2,7 +2,6 @@ package orm
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"net/url"
 	"os"
@@ -22,7 +21,7 @@ var conn *gorm.DB
 func pgConnect() *gorm.DB {
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
-		log.Fatal("Database configuration DSN missing, Pass in DATABASE_URL env")
+		panic("Database configuration DSN missing, Pass in DATABASE_URL env")
 	}
 
 	parse, _ := url.Parse(dsn)
@@ -44,7 +43,7 @@ func pgConnect() *gorm.DB {
 	})
 
 	if err != nil {
-		log.Fatalf("database error: %v", err)
+		panic("database error: " + err.Error())
 	}
 
 	_ = db.AutoMigrate(&model.Keyword{}, &model.URL{})
