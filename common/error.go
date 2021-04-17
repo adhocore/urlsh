@@ -18,4 +18,5 @@ var (
 	ErrTokenInvalid    = errors.New("auth token is invalid")
 	ErrShortCodeEmpty  = errors.New("short_code must not be empty")
 	ErrNoShortCode     = errors.New("short_code is not found")
+	ErrServerError     = errors.New("unexpected error encountered in server side")
 )

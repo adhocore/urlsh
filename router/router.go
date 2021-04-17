@@ -41,7 +41,7 @@ func RegisterHandlers() *http.ServeMux {
 	})
 
 	mux := http.NewServeMux()
-	mux.Handle("/", middleware.AdminAuth(handler))
+	mux.Handle("/", middleware.Recover(middleware.AdminAuth(handler)))
 
 	return mux
 }
