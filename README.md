@@ -1,5 +1,10 @@
 # urlsh
 
+[![Latest Version](https://img.shields.io/github/release/adhocore/urlsh.svg?style=flat-square)](https://github.com/adhocore/urlsh/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![lint](https://github.com/adhocore/urlsh/actions/workflows/lint-github-action.yml/badge.svg)](https://github.com/adhocore/urlsh/actions/workflows/lint-github-action.yml)
+[![test](https://github.com/adhocore/urlsh/actions/workflows/test-github-action.yml/badge.svg)](https://github.com/adhocore/urlsh/actions/workflows/test-github-action.yml)
+
 **[urlsh](https://urlssh.xyz)** is URL shortener application built on [Go](https://golang.org) language.
 
 It does not use external libraries except the [`gorm`](http://gorm.io) for
