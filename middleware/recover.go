@@ -13,9 +13,9 @@ func Recover(next http.Handler) http.Handler {
 		defer func() {
 			err := common.ErrServerError
 			if rec := recover(); rec != nil {
-				switch rec.(type) {
+				switch typ := rec.(type) {
 				case error:
-					err = rec.(error)
+					err = typ
 				}
 
 				response.JSON(res, http.StatusInternalServerError, response.Body{"message": err.Error()})
