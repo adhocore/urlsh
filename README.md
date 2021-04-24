@@ -4,6 +4,9 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![lint](https://github.com/adhocore/urlsh/actions/workflows/lint-github-action.yml/badge.svg)](https://github.com/adhocore/urlsh/actions/workflows/lint-github-action.yml)
 [![test](https://github.com/adhocore/urlsh/actions/workflows/test-github-action.yml/badge.svg)](https://github.com/adhocore/urlsh/actions/workflows/test-github-action.yml)
+[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square)](https://www.paypal.me/ji10/50usd)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=URL+shortener+app+built+on+Golang&url=https://github.com/adhocore/urlsh&hashtags=go,golang,url,urlshortener)
+
 
 **[urlsh](https://urlssh.xyz)** is URL shortener application built on [Go](https://golang.org) language.
 
