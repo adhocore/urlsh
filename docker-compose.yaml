@@ -11,7 +11,7 @@ services:
     volumes:
       - .:/go/src/app:delegated
     env_file:
-      - .env.example
+      - .env
     environment:
       - POSTGRES_HOST=urlshdb
     depends_on:
