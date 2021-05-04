@@ -7,28 +7,35 @@ import (
 	"github.com/adhocore/urlsh/service/url"
 )
 
+// EmbedAssetHandler is static assets handler.
+var EmbedAssetHandler http.Handler
+
 // Index is the controller for root aka index page
 // It responds to `GET /` and does not require auth token.
-func Index(res http.ResponseWriter, req *http.Request) {
-	http.ServeFile(res, req, "assets/home.html")
+func Index(w http.ResponseWriter, r *http.Request) {
+	r.URL.Path = "assets/home.html"
+	EmbedAssetHandler.ServeHTTP(w, r)
 }
 
 // Banner is the controller for favicon.ico
 // It responds to `GET /banner.png` and does not require auth token.
-func Banner(res http.ResponseWriter, req *http.Request) {
-	http.ServeFile(res, req, "assets/urlsh-light.png")
+func Banner(w http.ResponseWriter, r *http.Request) {
+	r.URL.Path = "assets/urlsh-light.png"
+	EmbedAssetHandler.ServeHTTP(w, r)
 }
 
 // Favicon is the controller for favicon.ico
 // It responds to `GET /favicon.ico` and does not require auth token.
-func Favicon(res http.ResponseWriter, req *http.Request) {
-	http.ServeFile(res, req, "assets/u.png")
+func Favicon(w http.ResponseWriter, r *http.Request) {
+	r.URL.Path = "assets/u.png"
+	EmbedAssetHandler.ServeHTTP(w, r)
 }
 
 // Robots is the controller for robots.txt
 // It responds to `GET /robots.txt` and does not require auth token.
-func Robots(res http.ResponseWriter, req *http.Request) {
-	http.ServeFile(res, req, "assets/robots.txt")
+func Robots(w http.ResponseWriter, r *http.Request) {
+	r.URL.Path = "assets/robots.txt"
+	EmbedAssetHandler.ServeHTTP(w, r)
 }
 
 // Status is the controller for health/status check
