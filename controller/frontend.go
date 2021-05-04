@@ -7,6 +7,7 @@ import (
 	"github.com/adhocore/urlsh/service/url"
 )
 
+// EmbedAssetHandler is static assets handler.
 var EmbedAssetHandler http.Handler
 
 // Index is the controller for root aka index page
