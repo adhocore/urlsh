@@ -1,6 +1,6 @@
 module github.com/adhocore/urlsh
 
-go 1.14
+go 1.16
 
 require (
 	github.com/gomodule/redigo v1.8.2
