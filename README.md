@@ -1,19 +1,49 @@
 # urlsh
 
+[![Latest Version](https://img.shields.io/github/release/adhocore/urlsh.svg?style=flat-square)](https://github.com/adhocore/urlsh/releases)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![lint](https://github.com/adhocore/urlsh/actions/workflows/lint-github-action.yml/badge.svg)](https://github.com/adhocore/urlsh/actions/workflows/lint-github-action.yml)
+[![test](https://github.com/adhocore/urlsh/actions/workflows/test-github-action.yml/badge.svg)](https://github.com/adhocore/urlsh/actions/workflows/test-github-action.yml)
+[![Donate](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square)](https://www.paypal.me/ji10/50usd)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=URL+shortener+app+built+on+Golang&url=https://github.com/adhocore/urlsh&hashtags=go,golang,url,urlshortener)
+
+
 **[urlsh](https://urlssh.xyz)** is URL shortener application built on [Go](https://golang.org) language.
 
 It does not use external libraries except the [`gorm`](http://gorm.io) for
 [`postgres`](https://github.com/go-gorm/postgres) database and minimal redis
 module [redigo](https://github.com/gomodule/redigo).
 
-It registers itself as Go module `github.com/adhocore/urlsh`
-(however it has not been submitted to Go package registry for public usage).
-
-![URLSH](./tmpl/urlsh.png)
+![URLSH](./assets/urlsh.png)
 
 # Usage
 
+#### Web client
+
 Just visit [urlssh.xyz](https://urlssh.xyz). You can also integrate API for programmatic usage.
+
+#### Terminal client
+
+If you live inside the command line terminal, you can install a client:
+```sh
+go get github.com/adhocore/urlsh/cmd/urlshc
+```
+
+Make sure `$GOPATH` or `$HOME/go/bin` is in your `$PATH` or `%path%`, then use it like so:
+```sh
+# show help
+urlshc -h
+
+# shorten a url
+urlshc -url 'https://your.long.url/here'
+
+# shorten a url with keywords and expiry date
+urlshc -url 'https://your.long.url/here' -keywords 'word-1,word2' -expires '2022-12-31'
+
+# if you have self hosted or local instance of urlsh, pass in URLSH_HOST (with domain only)
+URLSH_HOST=https://your.urlsh-instance.com urlshc -url 'https://your.long.url/here'
+```
+
 Read below for self hosting, API integration and/or contributing to *urlsh*.
 
 ___
@@ -62,7 +92,7 @@ cp .example.env .env
 docker-compose up
 ```
 
-After a few seconds, you should be able to browse to [localhost:1000](http://localhost:1000).
+After a few seconds, you should be able to browse to [localhost:2000](http://localhost:2000).
 
 ## Testing
 
@@ -119,7 +149,7 @@ Creates a new short code for given URL.
 {
     "status": 200,
     "short_code": "qaFxz",
-    "short_url": "http://localhost:1000/qaFxz"
+    "short_url": "http://localhost:2000/qaFxz"
 }
 ```
 

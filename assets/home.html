@@ -3,6 +3,11 @@
 <head>
   <title>URLSH | Shorten a long and complex URL</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Free and opensource GOlang URL shortener service with UI, API, Cache, Hits Counter and forwarder">
+  <meta property="og:url" content="https://urlssh.xyz" />
+  <meta property="og:title" content="URLSH | Shorten a long and complex URL for free" />
+  <meta property="og:description" content="Free and opensource GOlang URL shortener service with UI, API, Cache, Hits Counter and forwarder" />
+  <meta property="og:image" content="https://urlssh.xyz/banner.png" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.2/css/all.min.css">
   <style>
@@ -15,10 +20,13 @@
       width: 100%;
     }
     .th-code {
-      width: 10%;
+      width: 12%;
     }
     .th-url {
-      width: 90%;
+      width: 88%;
+    }
+    .copy-url {
+      cursor: pointer;
     }
   </style>
 </head>
@@ -39,7 +47,7 @@
         <div class="field">
           <div class="control has-icons-left">
             <span class="icon"><i class="fas fa-tags is-left"></i></span>
-            <input class="input is-success is-medium" type="text" placeholder="CSV keywords here" name="keywords">
+            <input class="input is-success is-medium" type="text" placeholder="CSV keywords here" name="keywords" autocomplete="off">
           </div>
           <p class="help is-success">Keywords are optional, if provided can be used to search</p>
         </div>
@@ -63,7 +71,7 @@
         </div>
       </form>
       <h4 class="subtitle">
-        Source code: <a target="_blank" href="https://github.com/adhocore/urlsh">adhocore/urlsh</a>
+        Source code: <a target="_blank" rel="noopener" href="https://urlssh.xyz/v473VY">adhocore/urlsh</a>
       </h4>
       <hr>
       <table class="table">
@@ -85,6 +93,7 @@ const butn = document.getElementById('button')
 const info = document.getElementById('info')
 const copy = document.getElementById('copy')
 const hist = document.getElementById('history')
+const base = `${document.location.protocol}//${document.location.host}`
 
 function shortenUrl() {
   if (butn.classList.contains('is-loading')) return false
@@ -122,16 +131,15 @@ function renderResponse(data) {
 
   if (!data.short_code) {
     info.innerText = data.message || 'unknown error'
+    copy.classList.add('is-hidden')
 
     return
   }
 
-  const shortUrl = `${document.location.protocol}//${document.location.host}/${data.short_code}`
-
   info.innerHTML = '&nbsp;'
   copy.innerText = `Copy ${document.location.host}/${data.short_code}`
   copy.classList.remove('is-hidden')
-  copy.dataset.shortUrl = shortUrl
+  copy.dataset.shortUrl = `${base}/${data.short_code}`
 
   form.reset()
 
@@ -145,18 +153,10 @@ function renderResponse(data) {
 
 function renderHistory(code, url, idx) {
   const row  = hist.insertRow(idx)
-  const col1 = row.insertCell()
-  const col2 = row.insertCell()
-  const link = document.createElement('a')
-  const trnk = url.length > 150 ? url.substring(0, 150) + '...' : url
 
-  row.id    = code
-  link.href = link.title = url
-
-  link.setAttribute('target', '_blank')
-  link.appendChild(document.createTextNode(code))
-  col1.appendChild(link)
-  col2.appendChild(document.createTextNode(trnk))
+  row.insertCell().innerHTML = `<a href="${base}/${code}" target="_blank" title="${url}">${code}</a>
+    <span class="icon"><i class="fas fa-copy copy-url" title="Copy URL" data-short-url="${base}/${code}"></i></span>`
+  row.insertCell().innerText = url.length > 150 ? url.substring(0, 150) + '...' : url
 }
 
 function loadHistory() {
@@ -169,6 +169,14 @@ function loadHistory() {
 }
 
 setTimeout(loadHistory, 500)
+document.addEventListener('click', e => {
+  if (e.target && e.target.classList.contains('copy-url')) {
+    navigator.clipboard.writeText(e.target.dataset.shortUrl).then(_ => {
+      e.target.classList.replace('fa-copy', 'fa-check')
+      setTimeout(_ => e.target.classList.replace('fa-check', 'fa-copy'), 2000)
+    })
+  }
+})
 </script>
 </body>
 </html>
