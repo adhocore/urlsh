@@ -1,32 +1,32 @@
 package main
 
 import (
-    "log"
-    "net/http"
-    "os"
-    "time"
+	"log"
+	"net/http"
+	"os"
+	"time"
 
-    "github.com/adhocore/urlsh/router"
+	"github.com/adhocore/urlsh/router"
 )
 
 func getPort() string {
-    if port := os.Getenv("PORT"); port != "" {
-        return port
-    }
+	if port := os.Getenv("PORT"); port != "" {
+		return port
+	}
 
-    return "1000"
+	return "2000"
 }
 
 func main() {
-    port := getPort()
+	port := getPort()
 
-    server := &http.Server{
-        Addr:         ":" + port,
-        Handler:      router.RegisterHandlers(),
-        ReadTimeout:  10 * time.Second,
-        WriteTimeout: 10 * time.Second,
-    }
+	server := &http.Server{
+		Addr:         ":" + port,
+		Handler:      router.RegisterHandlers(),
+		ReadTimeout:  1 * time.Second,
+		WriteTimeout: 1 * time.Second,
+	}
 
-    log.Printf("Server running on port %v", port)
-    log.Fatal(server.ListenAndServe())
+	log.Printf("Server running on port %v", port)
+	log.Fatal(server.ListenAndServe())
 }

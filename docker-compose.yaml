@@ -5,9 +5,9 @@ services:
   urlsh:
     image: golang:1.14
     working_dir: /go/src/app
-    command: sh -c 'sleep 5 && go run main.go'
+    command: sh -c 'sleep 2 && go run main.go'
     ports:
-      - ${APP_PORT:-1000}:${APP_PORT:-1000}
+      - ${PORT:-2000}:${PORT:-2000}
     volumes:
       - .:/go/src/app:delegated
     env_file:
@@ -21,7 +21,7 @@ services:
   urlshdb:
     image: postgres:12.4
     ports:
-      - 2000:5432
+      - 2001:5432
     volumes:
       - dbdata:/var/lib/postgresql
       - ./init-test-db.sh:/docker-entrypoint-initdb.d/init-test-db.sh
@@ -33,7 +33,7 @@ services:
   urlshcache:
     image: redis:alpine
     ports:
-      - 3000:6379
+      - 2002:6379
     volumes:
       - cachedata:/data
 
