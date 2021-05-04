@@ -3,7 +3,7 @@ version: '3.2'
 
 services:
   urlsh:
-    image: golang:1.14
+    image: golang:1.16.3
     working_dir: /go/src/app
     command: sh -c 'sleep 2 && go run main.go'
     ports:
@@ -11,7 +11,7 @@ services:
     volumes:
       - .:/go/src/app:delegated
     env_file:
-      - .env
+      - .env.example
     environment:
       - POSTGRES_HOST=urlshdb
     depends_on:
