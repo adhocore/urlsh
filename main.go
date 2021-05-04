@@ -2,12 +2,12 @@ package main
 
 import (
 	"embed"
-	"github.com/adhocore/urlsh/controller"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/adhocore/urlsh/controller"
 	"github.com/adhocore/urlsh/router"
 )
 
