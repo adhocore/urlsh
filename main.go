@@ -1,13 +1,22 @@
 package main
 
 import (
+	"embed"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/adhocore/urlsh/controller"
 	"github.com/adhocore/urlsh/router"
 )
+
+//go:embed assets
+var embedAssetsFS embed.FS
+
+func init() {
+	controller.EmbedAssetHandler = http.FileServer(http.FS(embedAssetsFS))
+}
 
 func getPort() string {
 	if port := os.Getenv("PORT"); port != "" {
