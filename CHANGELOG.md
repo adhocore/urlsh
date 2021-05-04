@@ -1,3 +1,22 @@
+## [v0.1.2](https://github.com/adhocore/urlsh/releases/tag/v0.1.2) (2021-05-04)
+
+### Features
+- **Middleware**: Add recover middleware (Jitendra Adhikari) [_3bcbcce_](https://github.com/adhocore/urlsh/commit/3bcbcce)
+
+### Internal Refactors
+- **Middleware**: Switch type usage (Jitendra Adhikari) [_624659e_](https://github.com/adhocore/urlsh/commit/624659e)
+- **Router**: Wrap handler with recover (Jitendra Adhikari) [_17cd64d_](https://github.com/adhocore/urlsh/commit/17cd64d)
+- **Orm**: Use panic (Jitendra Adhikari) [_c16c881_](https://github.com/adhocore/urlsh/commit/c16c881)
+
+### Miscellaneous
+- **Common**: Add server error (Jitendra Adhikari) [_b3cadf9_](https://github.com/adhocore/urlsh/commit/b3cadf9)
+
+### Builds
+- **Docker**: No CGO in alpine container (Jitendra Adhikari) [_1856cb5_](https://github.com/adhocore/urlsh/commit/1856cb5)
+- **Docker**: Env map should be .env only (Jitendra Adhikari) [_080e65c_](https://github.com/adhocore/urlsh/commit/080e65c)
+- **Docker**: Use alpine images (Jitendra Adhikari) [_88bc5bf_](https://github.com/adhocore/urlsh/commit/88bc5bf)
+
+
 ## [v0.1.1](https://github.com/adhocore/urlsh/releases/tag/v0.1.1) (2021-04-14)
 
 ### Internal Refactors
