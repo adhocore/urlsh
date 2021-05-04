@@ -270,3 +270,10 @@ The collection comes with post/pre request hooks for requests so you can just ru
 ### License
 
 Please check [license](./LICENSE) file.
+
+---
+### Other projects
+My other golang projects you might find interesting and useful:
+
+- [**gronx**](https://github.com/adhocore/gronx) - Lightweight, fast and dependency-free Cron expression parser (due checker), task scheduler and/or daemon for Golang (tested on v1.13 and above) and standalone usage.
+- [**fast**](https://github.com/adhocore/fast) - Check your internet speed with ease and comfort right from the terminal
