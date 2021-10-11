@@ -1,8 +1,11 @@
 package router
 
 import (
+	"encoding/json"
 	"net/http"
+	"os"
 
+	"github.com/adhocore/goic"
 	"github.com/adhocore/urlsh/common"
 	"github.com/adhocore/urlsh/controller"
 	"github.com/adhocore/urlsh/middleware"
@@ -36,12 +39,25 @@ func locateHandler(method string, path string) http.HandlerFunc {
 // RegisterHandlers registers middlewares, handlers and route locators
 // It returns server mux which then can be attached to a http server.
 func RegisterHandlers() *http.ServeMux {
+	g := goic.New("/auth/o8", false)
+
+	g.NewProvider("google", "https://accounts.google.com").
+		WithCredential(os.Getenv("GOOGLE_CLIENT_ID"), os.Getenv("GOOGLE_CLIENT_SECRET")).
+		WithScope("openid email profile")
+
+	g.UserCallback(func(t *goic.Token, u *goic.User, res http.ResponseWriter, req *http.Request) {
+		res.Header().Add("Content-Type", "application/json")
+		res.WriteHeader(200)
+
+		_ = json.NewEncoder(res).Encode(u)
+	})
+
 	handler := http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 		locateHandler(req.Method, req.URL.Path)(res, req)
 	})
 
 	mux := http.NewServeMux()
-	mux.Handle("/", middleware.Recover(middleware.AdminAuth(handler)))
+	mux.Handle("/", g.MiddlewareHandler(middleware.Recover(middleware.AdminAuth(handler))))
 
 	return mux
 }
