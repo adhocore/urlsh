@@ -41,9 +41,8 @@ func locateHandler(method string, path string) http.HandlerFunc {
 func RegisterHandlers() *http.ServeMux {
 	g := goic.New("/auth/o8", false)
 
-	g.NewProvider("google", "https://accounts.google.com").
-		WithCredential(os.Getenv("GOOGLE_CLIENT_ID"), os.Getenv("GOOGLE_CLIENT_SECRET")).
-		WithScope("openid email profile")
+	g.AddProvider(goic.Google.WithCredential(os.Getenv("GOOGLE_CLIENT_ID"), os.Getenv("GOOGLE_CLIENT_SECRET")))
+	g.AddProvider(goic.Microsoft.WithCredential(os.Getenv("MICROSOFT_CLIENT_ID"), os.Getenv("MICROSOFT_CLIENT_SECRET")))
 
 	g.UserCallback(func(t *goic.Token, u *goic.User, res http.ResponseWriter, req *http.Request) {
 		res.Header().Add("Content-Type", "application/json")
