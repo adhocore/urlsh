@@ -10,4 +10,4 @@ insert_final_newline = true
 
 [*.go]
 indent_style = tab
-tab_width = 2
+indent_size = 2
