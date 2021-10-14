@@ -1,6 +1,6 @@
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/adhocore/goic v0.0.6 h1:QuGoqcrbhCFscptJllZ545CDblFDfIE27zX0TyPhKfE=
-github.com/adhocore/goic v0.0.6/go.mod h1:RJOpymvp+pu67aN3UeQNi59Yqd6EmCIBkCcRlWEr5xU=
+github.com/adhocore/goic v0.0.10 h1:KYc+qhDaQmshkWO7rJ01AXNd16QyjqDlG2YQJJHPIv0=
+github.com/adhocore/goic v0.0.10/go.mod h1:RJOpymvp+pu67aN3UeQNi59Yqd6EmCIBkCcRlWEr5xU=
 github.com/cockroachdb/apd v1.1.0 h1:3LFP3629v+1aKXU5Q37mxmRxX/pIu1nijXydLShEq5I=
 github.com/cockroachdb/apd v1.1.0/go.mod h1:8Sl8LxpKi29FqWXR16WEFZRNSz3SoPzUzeMeY4+DwBQ=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
