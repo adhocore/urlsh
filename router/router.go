@@ -43,6 +43,7 @@ func RegisterHandlers() *http.ServeMux {
 
 	g.AddProvider(goic.Google.WithCredential(os.Getenv("GOOGLE_CLIENT_ID"), os.Getenv("GOOGLE_CLIENT_SECRET")))
 	g.AddProvider(goic.Microsoft.WithCredential(os.Getenv("MICROSOFT_CLIENT_ID"), os.Getenv("MICROSOFT_CLIENT_SECRET")))
+	g.AddProvider(goic.Yahoo.WithCredential(os.Getenv("YAHOO_CLIENT_ID"), os.Getenv("YAHOO_CLIENT_SECRET")))
 
 	g.UserCallback(func(t *goic.Token, u *goic.User, res http.ResponseWriter, req *http.Request) {
 		res.Header().Add("Content-Type", "application/json")
