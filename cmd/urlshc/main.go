@@ -2,8 +2,8 @@ package main
 
 import (
 	"bytes"
-	"errors"
 	"encoding/json"
+	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -11,15 +11,16 @@ import (
 	"os"
 	"strings"
 
+	"github.com/adhocore/chin"
 	ureq "github.com/adhocore/urlsh/request"
 	usrv "github.com/adhocore/urlsh/service/url"
 )
 
 // URLOutput is the structure for response sent by urlsh server
 type URLOutput struct {
-	Status     uint    `json:"status" binding:"required"`
-	ShortCode  string  `json:"short_code"`
-	Message    string  `json:"message"`
+	Status    uint   `json:"status" binding:"required"`
+	ShortCode string `json:"short_code"`
+	Message   string `json:"message"`
 }
 
 const path = "/api/urls"
@@ -32,7 +33,11 @@ func main() {
 	in, err := input()
 	abort(err)
 
+	s := chin.New()
+	go s.Start()
+
 	out := request(in)
+	s.Stop()
 	info(in, out)
 }
 
@@ -73,7 +78,7 @@ func request(in ureq.URLInput) URLOutput {
 	buf, err := json.Marshal(in)
 	abort(err)
 
-	req, err := http.NewRequest("POST", host() + path, bytes.NewBuffer(buf))
+	req, err := http.NewRequest("POST", host()+path, bytes.NewBuffer(buf))
 	abort(err)
 
 	client := &http.Client{}
@@ -108,5 +113,5 @@ func info(i ureq.URLInput, o URLOutput) {
 	}
 
 	fmt.Printf("\033[36mURL:\033[m \033[33m%s\033[m\n", i.URL)
-	fmt.Printf("\033[36mShort URL:\033[m \033[32m%s\033[m\n", host() + "/" + o.ShortCode)
+	fmt.Printf("\033[36mShort URL:\033[m \033[32m%s\033[m\n", host()+"/"+o.ShortCode)
 }
