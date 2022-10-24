@@ -31,6 +31,11 @@ If you live inside the command line terminal, you can install a client:
 go get github.com/adhocore/urlsh/cmd/urlshc
 ```
 
+or, with newer go versions
+```sh
+go install github.com/adhocore/urlsh/cmd/urlshc
+```
+
 Make sure `$GOPATH` or `$HOME/go/bin` is in your `$PATH` or `%path%`, then use it like so:
 ```sh
 # show help
