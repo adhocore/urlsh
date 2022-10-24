@@ -283,4 +283,6 @@ Please check [license](./LICENSE) file.
 My other golang projects you might find interesting and useful:
 
 - [**gronx**](https://github.com/adhocore/gronx) - Lightweight, fast and dependency-free Cron expression parser (due checker), task scheduler and/or daemon for Golang (tested on v1.13 and above) and standalone usage.
-- [**fast**](https://github.com/adhocore/fast) - Check your internet speed with ease and comfort right from the terminal
+- [**fast**](https://github.com/adhocore/fast) - Check your internet speed with ease and comfort right from the terminal.
+- [**goic**](https://github.com/adhocore/goic) - Go Open ID Connect, is OpenID connect client library for Golang, supports the Authorization Code Flow of OpenID Connect specification.
+- [**chin**](https://github.com/adhocore/chin) - A GO lang command line tool to show a spinner as user waits for some long running jobs to finish.
