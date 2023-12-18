@@ -13,5 +13,5 @@ require (
 require (
 	github.com/golang-jwt/jwt/v4 v4.4.2 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
-	golang.org/x/crypto v0.1.0 // indirect
+	golang.org/x/crypto v0.17.0 // indirect
 )
