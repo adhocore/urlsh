@@ -11,7 +11,7 @@
 [![Donate 50](https://img.shields.io/badge/donate-paypal-blue.svg?style=flat-square&label=donate+50)](https://www.paypal.me/ji10/50usd) -->
 
 
-**[urlsh](https://urlssh.xyz)** is URL shortener application built on [Go](https://golang.org) language.
+**urlsh** is URL shortener application built on [Go](https://golang.org) language.
 
 It does not use external libraries except the [`gorm`](http://gorm.io) for
 [`postgres`](https://github.com/go-gorm/postgres) database and minimal redis
@@ -23,7 +23,7 @@ module [redigo](https://github.com/gomodule/redigo).
 
 #### Web client
 
-Just visit [urlssh.xyz](https://urlssh.xyz). You can also integrate API for programmatic usage.
+Just visit the homepage of your urlsh deployment site. You can also integrate API for programmatic usage.
 
 #### Terminal client
 
